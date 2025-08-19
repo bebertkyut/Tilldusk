@@ -35,10 +35,18 @@ export default function Home() {
           {/* Right side: season select */}
           <div className="flex items-center gap-2">
             <Select value={season} onValueChange={setSeason}>
-              <SelectTrigger className="min-w-fit w-12 rounded-xl shadow-sm border px-2 py-2">
-                <SelectValue placeholder="Choose season" />
+              <SelectTrigger
+                className={`min-w-fit w-12 rounded-xl px-2 py-2 focus:outline-none border-0 shadow-sm ${
+                  mode === "dark" ? "shadow-white/20" : ""
+                }`}
+              >
+                <SelectValue />
               </SelectTrigger>
-              <SelectContent className="min-w-fit w-12">
+              <SelectContent
+                className={`min-w-fit w-12 focus:outline-none border-0 shadow-lg ${
+                  mode === "dark" ? "shadow-white/20" : ""
+                }`}
+              >
                 <SelectItem value="spring" className="flex items-center">
                   <SpringIcon />
                 </SelectItem>
@@ -84,7 +92,10 @@ export default function Home() {
           A place for stories, shaped by{" "}
           <span style={{ color: "var(--color-primary)" }}>seasons</span>
           , and souls.
-        </h1> 
+        </h1>
+        <p className="font-normal text-lg mb-2">
+          Wander freely, write deeply, and connect gently as the light begins to fade.
+        </p>
       </main>
     </>
   );
