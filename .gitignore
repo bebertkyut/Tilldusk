@@ -66,6 +66,7 @@ next-env.d.ts
 # (keep if shared across team, ignore if personal only)
 # -------------------------
 .nvmrc
+components.json
 
 # -------------------------
 # Editor settings (optional ignore)
