@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { useTheme } from "./ThemeContext";
+import { useTheme } from "../context/ThemeContext";
 
 const themeMap = {
   spring: { light: "light-spring", dark: "dark-spring" },

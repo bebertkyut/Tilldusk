@@ -1,42 +1,58 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
-import { useTheme } from "../ThemeContext";
-import { useEffect } from "react";
-
-const themeMap = {
-  spring: { light: "light-spring", dark: "dark-spring" },
-  summer: { light: "light-summer", dark: "dark-summer" },
-  autumn: { light: "light-autumn", dark: "dark-autumn" },
-  winter: { light: "light-winter", dark: "dark-winter" },
-};
+import { useTheme } from "../../context/ThemeContext";
+import { SeasonTheme } from "../../components/SeasonTheme";
 
 export default function LoginPage() {
-  const { season, mode } = useTheme();
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", themeMap[season][mode]);
-    return () => {
-      document.documentElement.removeAttribute("data-theme");
-    };
-  }, [season, mode]);
+  const { season, setSeason, mode, setMode } = useTheme();
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center">
-      <h1 className="text-4xl font-bold mb-6">Welcome back!</h1>
-      <div className="flex gap-4 mb-6">
-        <button
-          className="px-4 py-2 bg-pink-500 text-white rounded font-semibold hover:bg-pink-600 transition"
-          onClick={() => alert("Logged out!")}
+    <>
+      <SeasonTheme />
+      {/* Navbar */}
+      <nav className="w-full fixed top-0 left-0 flex items-center justify-between px-8 py-4 mb-8 bg-transparent z-50">
+        <div className="flex items-center gap-2">
+          {/* Optimized SVG logo */}
+          <Image src="/logo.svg" alt="Tildusk Owl Logo" width={32} height={32} />
+          <span className="text-2xl font-extrabold" style={{ fontFamily: "var(--font-title)" }}>
+            Tildusk
+          </span>
+        </div>
+      </nav>
+      <main className="min-h-screen flex flex-col items-center justify-center">
+        <h1 className="text-4xl font-bold mb-6">Welcome back!</h1>
+        <div className="flex gap-4 mb-6">
+        </div>
+        <div className="flex gap-4 mb-6">
+          <select
+            value={season}
+            onChange={(e) => setSeason(e.target.value)}
+            className="px-4 py-2 rounded border"
+          >
+            <option value="spring">Spring</option>
+            <option value="summer">Summer</option>
+            <option value="autumn">Autumn</option>
+            <option value="winter">Winter</option>
+          </select>
+          <label className="flex items-center cursor-pointer">
+            <span className="mr-2 font-semibold">{mode === "light" ? "Light" : "Dark"}</span>
+            <input
+              type="checkbox"
+              checked={mode === "dark"}
+              onChange={() => setMode(mode === "light" ? "dark" : "light")}
+              className="toggle-checkbox"
+              style={{ width: 40, height: 20 }}
+            />
+          </label>
+        </div>
+        <Link
+          href="/"
+          className="px-4 py-2 bg-white text-blue-500 rounded font-semibold hover:bg-blue-100 transition"
         >
-          Logout
-        </button>
-      </div>
-      <Link
-        href="/"
-        className="px-4 py-2 bg-white text-blue-500 rounded font-semibold hover:bg-blue-100 transition"
-      >
-        Home
-      </Link>
-    </main>
+          Home
+        </Link>
+      </main>
+    </>
   );
 }

@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
-import { SeasonTheme } from "./SeasonTheme";
-import { useTheme } from "./ThemeContext";
 import Link from "next/link";
+import { SeasonTheme } from "../components/SeasonTheme";
+import { useTheme } from "../context/ThemeContext";
+
 
 export default function Home() {
   const { season, setSeason, mode, setMode } = useTheme();
