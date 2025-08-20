@@ -12,8 +12,9 @@ import {
 } from "@/components/ui/select";
 import { SpringIcon, SummerIcon, AutumnIcon, WinterIcon } from "@/components/SeasonIcons";
 
-export default function Home() {
+export default function Landing() {
   const { season, setSeason, mode, setMode } = useTheme();
+  
 
   return (
     <>
@@ -36,14 +37,14 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <Select value={season} onValueChange={setSeason}>
               <SelectTrigger
-                className={`min-w-fit w-12 rounded-xl px-2 py-2 focus:outline-none border-0 shadow-sm ${
+                className={`min-w-fit w-12 rounded-xl px-2 py-2 border-0 shadow-sm ${
                   mode === "dark" ? "shadow-white/20" : ""
                 }`}
               >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent
-                className={`min-w-fit w-12 focus:outline-none border-0 shadow-lg ${
+                className={`min-w-fit w-12 border-0 shadow-lg ${
                   mode === "dark" ? "shadow-white/20" : ""
                 }`}
               >
@@ -80,7 +81,7 @@ export default function Home() {
               </button>
             </label>
             <Link
-              href="/login"
+              href="/api/auth/signin?callbackUrl=/signIn"
               className="button-primary px-4 py-2 text-white rounded font-semibold hover:opacity-90 transition"
             >
               Login

@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { SpringIcon, SummerIcon, AutumnIcon, WinterIcon } from "@/components/SeasonIcons";
 
-export default function LoginPage() {
+export default function Home() {
   const { season, setSeason, mode, setMode } = useTheme();
 
   return (

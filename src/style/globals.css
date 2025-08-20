@@ -41,50 +41,66 @@
 }
 
 :root[data-theme='light-spring'] {
-	--color-primary: #ec4899;
 	--color-background: #fdfcf9;
+	--color-surface: #F9F5F0;
+	--color-primary: #ec4899;
+	--color-secondary: #a5f3fc;
 	--color-text: #4b4453;
 }
 
 :root[data-theme='dark-spring'] {
-	--color-primary: #ec4899;
 	--color-background: #1e1b2e;
+	--color-surface: #2B253F;
+	--color-primary: #ec4899;
+	--color-secondary: #22d3ee;
 	--color-text: #e9e9f9;
 }
 
 :root[data-theme='light-summer'] {
-	--color-primary: #f59e0b;
 	--color-background: #fffaf0;
+	--color-surface: #FFF3D8;
+	--color-primary: #f59e0b;
+	--color-secondary: #3b82f6;
 	--color-text: #3d2c1f;
 }
 
 :root[data-theme='dark-summer'] {
-	--color-primary: #f59e0b;
 	--color-background: #1c1c29;
+	--color-surface: #2B2A3C;
+	--color-primary: #f59e0b;
+	--color-secondary: #38bdf8;
 	--color-text: #f3f4f6;
 }
 
 :root[data-theme='light-autumn'] {
-	--color-primary: #f97316;
 	--color-background: #fff8f0;
+	--color-surface: #FAE3D9;
+	--color-primary: #f97316;
+	--color-secondary: #d97706;
 	--color-text: #3d2c29;
 }
 
 :root[data-theme='dark-autumn'] {
-	--color-primary: #f97316;
 	--color-background: #1b1511;
+	--color-surface: #2A211B;
+	--color-primary: #f97316;
+	--color-secondary: #d97706;
 	--color-text: #f3ede7;
 }
 
 :root[data-theme='light-winter'] {
-	--color-primary: #60a5fa;
 	--color-background: #f0f4f8;
+	--color-surface: #E3EAF2;
+	--color-primary: #60a5fa;
+	--color-secondary: #a5b4fc;
 	--color-text: #1e293b;
 }
 
 :root[data-theme='dark-winter'] {
-	--color-primary: #60a5fa;
 	--color-background: #0e1a2b;
+	--color-surface: #1A293B;
+	--color-primary: #60a5fa;
+	--color-secondary: #818cf8;
 	--color-text: #dce4f2;
 }
 

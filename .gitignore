@@ -74,3 +74,15 @@ components.json
 # -------------------------
 # .vscode/
 # .idea/
+
+# -------------------------
+# Local SQLite database (if using Prisma with SQLite)
+# -------------------------
+# *.db
+# *.db-journal
+
+# -------------------------
+# Docker files (optional ignore)
+# Uncomment if personal only
+# -------------------------
+.docker/
