@@ -37,14 +37,14 @@ export default function Landing() {
           <div className="flex items-center gap-2">
             <Select value={season} onValueChange={setSeason}>
               <SelectTrigger
-                className={`min-w-fit w-12 rounded-xl px-2 py-2 border-0 shadow-sm ${
-                  mode === "dark" ? "shadow-white/20" : ""
+                className={`min-w-fit w-12 rounded-xl px-2 py-2 border-0 shadow-sm bg-[var(--color-surface)] ${
+                  mode === "dark" ? "shadow-white/20" : "shadow-lg"
                 }`}
               >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent
-                className={`min-w-fit w-12 border-0 shadow-lg ${
+                className={`min-w-fit w-12 border-0 shadow-lg shadow-lg bg-[var(--color-surface)] ${
                   mode === "dark" ? "shadow-white/20" : ""
                 }`}
               >

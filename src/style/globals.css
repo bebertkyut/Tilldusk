@@ -2,6 +2,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
 	--font-sans: 'Manrope', sans-serif;
@@ -42,65 +45,73 @@
 
 :root[data-theme='light-spring'] {
 	--color-background: #fdfcf9;
-	--color-surface: #F9F5F0;
+	--color-surface: #f9f5f0;
 	--color-primary: #ec4899;
-	--color-secondary: #a5f3fc;
+	--color-secondary: #22d3ee;
+	--color-accent: #86efac;
 	--color-text: #4b4453;
 }
 
 :root[data-theme='dark-spring'] {
 	--color-background: #1e1b2e;
-	--color-surface: #2B253F;
+	--color-surface: #2b253f;
 	--color-primary: #ec4899;
 	--color-secondary: #22d3ee;
+	--color-accent: #86efac;
 	--color-text: #e9e9f9;
 }
 
 :root[data-theme='light-summer'] {
-	--color-background: #fffaf0;
-	--color-surface: #FFF3D8;
+	--color-background: #fff3d8;
+	--color-surface: #ffe9c9;
 	--color-primary: #f59e0b;
 	--color-secondary: #3b82f6;
+	--color-accent: #fbbf24;
 	--color-text: #3d2c1f;
 }
 
 :root[data-theme='dark-summer'] {
 	--color-background: #1c1c29;
-	--color-surface: #2B2A3C;
+	--color-surface: #2b2a3c;
 	--color-primary: #f59e0b;
 	--color-secondary: #38bdf8;
+	--color-accent: #facc15;
 	--color-text: #f3f4f6;
 }
 
 :root[data-theme='light-autumn'] {
 	--color-background: #fff8f0;
-	--color-surface: #FAE3D9;
+	--color-surface: #fae3d9;
 	--color-primary: #f97316;
-	--color-secondary: #d97706;
+	--color-secondary: #c28b47;
+	--color-accent: #8b4513;
 	--color-text: #3d2c29;
 }
 
 :root[data-theme='dark-autumn'] {
 	--color-background: #1b1511;
-	--color-surface: #2A211B;
+	--color-surface: #2a211b;
 	--color-primary: #f97316;
-	--color-secondary: #d97706;
+	--color-secondary: #c28b47;
+	--color-accent: #8b4513;
 	--color-text: #f3ede7;
 }
 
 :root[data-theme='light-winter'] {
 	--color-background: #f0f4f8;
-	--color-surface: #E3EAF2;
+	--color-surface: #e3eaf2;
 	--color-primary: #60a5fa;
-	--color-secondary: #a5b4fc;
+	--color-secondary: #818cf8;
+	--color-accent: #93c5fd;
 	--color-text: #1e293b;
 }
 
 :root[data-theme='dark-winter'] {
 	--color-background: #0e1a2b;
-	--color-surface: #1A293B;
+	--color-surface: #1a293b;
 	--color-primary: #60a5fa;
 	--color-secondary: #818cf8;
+	--color-accent: #93c5fd;
 	--color-text: #dce4f2;
 }
 
@@ -114,7 +125,7 @@ body {
 	background-color: var(--color-primary);
 }
 
-/* @theme inline {
+@theme inline {
 	--radius-sm: calc(var(--radius) - 4px);
 	--radius-md: calc(var(--radius) - 2px);
 	--radius-lg: var(--radius);
@@ -123,7 +134,7 @@ body {
 	--color-foreground: var(--foreground);
 	--color-card: var(--card);
 	--color-card-foreground: var(--card-foreground);
-	--color-popover: var(--popover);
+	/* --color-popover: var(--popover); */
 	--color-popover-foreground: var(--popover-foreground);
 	--color-primary: var(--primary);
 	--color-primary-foreground: var(--primary-foreground);
@@ -135,7 +146,7 @@ body {
 	--color-accent-foreground: var(--accent-foreground);
 	--color-destructive: var(--destructive);
 	--color-border: var(--border);
-	--color-input: var(--input);
+	/* --color-input: var(--input); */
 	--color-ring: var(--ring);
 	--color-chart-1: var(--chart-1);
 	--color-chart-2: var(--chart-2);
@@ -188,9 +199,9 @@ body {
 
 @layer base {
 	* {
-		@apply border-border outline-ring/50;
+		@apply border-border;
 	}
 	body {
 		@apply bg-background text-foreground;
 	}
-} */
+}

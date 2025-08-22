@@ -3,12 +3,10 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { SeasonTheme } from "../../components/SeasonTheme";
-import { useTheme } from "../../context/ThemeContext";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { season, mode } = useTheme(); // get season and mode
 
   const handleCredentialsLogin = async (e) => {
     e.preventDefault();
@@ -38,7 +36,7 @@ export default function SignInPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 w-full rounded-md border border-gray-300 p-2 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                className="mt-1 w-full rounded-md border p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)]"
                 placeholder="you@example.com"
                 required
               />
@@ -52,7 +50,7 @@ export default function SignInPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 w-full rounded-md border border-gray-300 p-2 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                className="mt-1 w-full rounded-md border p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)]"
                 placeholder="••••••••"
                 required
               />
@@ -60,15 +58,15 @@ export default function SignInPage() {
 
             <button
               type="submit"
-              className="w-full rounded-md bg-indigo-600 px-4 py-2 text-white font-medium hover:bg-indigo-700 transition"
+              className="w-full rounded-md px-4 py-2 text-white font-medium hover:bg-indigo-700 transition"
               style={{ background: `var(--color-primary)` }}
             >
               Sign in
             </button>
             <button
               type="submit"
-              className="w-full rounded-md bg-indigo-600 px-4 py-2 text-black font-medium hover:bg-indigo-700 transition"
-              style={{ background: `var(--color-secondary)` }}
+              className="w-full rounded-md px-4 py-2 text-black font-medium hover:bg-indigo-700 transition"
+              style={{ background: `var(--color-accent)` }}
             >
               Sign up
             </button>
