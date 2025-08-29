@@ -33,37 +33,41 @@ export default function Landing() {
               Tildusk
             </span>
           </div>
-          {/* Right side: season select */}
-          <div className="flex items-center gap-2">
-            <Select value={season} onValueChange={setSeason}>
-              <SelectTrigger
-                className={`min-w-fit w-12 rounded-xl px-2 py-2 border-0 shadow-sm bg-[var(--color-surface)] ${
-                  mode === "dark" ? "shadow-white/20" : "shadow-lg"
-                }`}
-              >
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent
-                className={`min-w-fit w-12 border-0 shadow-lg shadow-lg bg-[var(--color-surface)] ${
-                  mode === "dark" ? "shadow-white/20" : ""
-                }`}
-              >
-                <SelectItem value="spring" className="flex items-center">
-                  <SpringIcon />
-                </SelectItem>
-                <SelectItem value="summer" className="flex items-center">
-                  <SummerIcon />
-                </SelectItem>
-                <SelectItem value="autumn" className="flex items-center">
-                  <AutumnIcon />
-                </SelectItem>
-                <SelectItem value="winter" className="flex items-center">
-                  <WinterIcon />
-                </SelectItem>
-              </SelectContent>
-            </Select>
-            <label className="flex items-center cursor-pointer">
-              <span className="mr-2 font-semibold">{mode === "light" ? "Light" : "Dark"}</span>
+          {/* Right side: season select, toggle, login */}
+          <div className="flex items-center gap-4">
+            {/* Season select */}
+            <div className="flex items-center">
+              <Select value={season} onValueChange={setSeason}>
+                <SelectTrigger
+                  className={`min-w-fit w-12 rounded-xl px-2 py-2 border-0 shadow-sm bg-[var(--color-surface)] ${
+                    mode === "dark" ? "shadow-white/20" : "shadow-lg"
+                  }`}
+                >
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent
+                  className={`min-w-fit w-12 border-0 shadow-lg bg-[var(--color-surface)] ${
+                    mode === "dark" ? "shadow-white/20" : ""
+                  }`}
+                >
+                  <SelectItem value="spring" className="flex items-center">
+                    <SpringIcon />
+                  </SelectItem>
+                  <SelectItem value="summer" className="flex items-center">
+                    <SummerIcon />
+                  </SelectItem>
+                  <SelectItem value="autumn" className="flex items-center">
+                    <AutumnIcon />
+                  </SelectItem>
+                  <SelectItem value="winter" className="flex items-center">
+                    <WinterIcon />
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {/* Toggle */}
+            <div className="flex items-center min-w-[80px]">
+              <span className="mr-2 font-semibold min-w-[48px] text-center">{mode === "light" ? "Light" : "Dark"}</span>
               <button
                 type="button"
                 aria-pressed={mode === "dark"}
@@ -79,13 +83,16 @@ export default function Landing() {
                   }`}
                 />
               </button>
-            </label>
-            <Link
-              href="/api/auth/signin?callbackUrl=/signIn"
-              className="button-primary px-4 py-2 text-white rounded font-semibold hover:opacity-90 transition"
-            >
-              Login
-            </Link>
+            </div>
+            {/* Login */}
+            <div className="flex items-center">
+              <Link
+                href="/api/auth/signin?callbackUrl=/signIn"
+                className="button-primary px-4 py-2 text-white rounded font-semibold hover:opacity-90 transition"
+              >
+                Login
+              </Link>
+            </div>
           </div>
         </nav>
       <main className="min-h-screen flex flex-col items-center justify-center">

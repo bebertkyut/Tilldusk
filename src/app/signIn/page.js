@@ -21,7 +21,7 @@ export default function SignInPage() {
     <>
       <SeasonTheme />
       <main className="flex min-h-screen items-center justify-center px-4" style={{ background: `var(--color-background)` }}>
-        <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl" style= {{ background: `var(--color-surface)` }}>
+        <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl" style= {{ background: `var(--color-surface)`}}>
           {/* Title */}
           <h1 className="mb-6 text-center text-2xl font-bold" style={{ color: `var(--color-text)` }}>
             <span style={{ fontFamily: 'var(--font-title)'}}>Sign in to Tildusk</span>
@@ -29,29 +29,27 @@ export default function SignInPage() {
           {/* Username & Password */}
           <form onSubmit={handleCredentialsLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-[var(--color-text)]">
                 Email
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 w-full rounded-md border p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)]"
-                placeholder="you@example.com"
+                className="mt-1 w-full rounded-md border border-[var(--color-text)] p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)]"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-[var(--color-text)]">
                 Password
               </label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 w-full rounded-md border p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)]"
-                placeholder="••••••••"
+                className="mt-1 w-full rounded-md border border-[var(--color-text)] p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)]"
                 required
               />
             </div>
@@ -74,9 +72,9 @@ export default function SignInPage() {
 
           {/* Divider */}
           <div className="my-6 flex items-center">
-            <div className="flex-grow border-t border-gray-300"></div>
-            <span className="mx-2 text-sm text-gray-500">or</span>
-            <div className="flex-grow border-t border-gray-300"></div>
+            <div className="flex-grow border-t border-[var(--color-text)]"></div>
+            <span className="mx-2 text-sm text-[var(--color-text)]">or</span>
+            <div className="flex-grow border-t border-[var(--color-text)]"></div>
           </div>
 
           {/* GitHub OAuth */}
