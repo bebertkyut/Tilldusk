@@ -72,8 +72,9 @@ components.json
 # Editor settings (optional ignore)
 # Uncomment if personal only
 # -------------------------
-# .vscode/
-# .idea/
+.vscode/
+.idea/
+cspell.json
 
 # -------------------------
 # Local SQLite database (if using Prisma with SQLite)

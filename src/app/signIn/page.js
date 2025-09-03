@@ -32,7 +32,7 @@ export default function SignInPage() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: "http://localhost:3000/home",
+        redirectTo: "http://localhost:3000/test",
       },
     })
     if (error) setError(error.message)
