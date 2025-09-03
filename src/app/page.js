@@ -87,7 +87,7 @@ export default function Landing() {
             {/* Login */}
             <div className="flex items-center">
               <Link
-                href="/api/auth/signin?callbackUrl=/signIn"
+                href="/signIn"
                 className="button-primary px-4 py-2 text-white rounded font-semibold hover:opacity-90 transition"
               >
                 Login
