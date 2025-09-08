@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useTheme } from "../../context/ThemeContext";
+import { useProfile } from "@/hooks/useProfile";
 import { SeasonTheme } from "../../components/SeasonTheme";
 import {
   Select,
@@ -20,8 +21,16 @@ import {
 export default function Home() {
   const { season, setSeason, mode, setMode } = useTheme();
 
-  // Dummy data
-  const user = { name: "Jane Doe", bio: "Fullstack Dev", avatar: "/avatar.png" };
+  const { profile } = useProfile();
+
+  const user = profile
+    ? {
+        name: profile.display_name,
+        bio: profile.bio,
+        avatar: profile.avatar_url || "/avatar.png",
+      }
+    : { name: "", bio: "", avatar: "/avatar.png" };
+
   const posts = [
     { id: 1, title: "My First Blog", excerpt: "This is about my journey..." },
     { id: 2, title: "Next.js Tips", excerpt: "Some tips I’ve learned..." },
