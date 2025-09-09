@@ -25,11 +25,12 @@ export default function Home() {
 
   const user = profile
     ? {
-        name: profile.display_name,
-        bio: profile.bio,
-        avatar: profile.avatar_url || "/avatar.png",
-      }
-    : { name: "", bio: "", avatar: "/avatar.png" };
+      name: profile.display_name,
+      bio: profile.bio,
+      avatar: profile.avatar_url || "/avatar.png",
+      banner: profile.banner || null,
+    }
+  : { name: "", bio: "", avatar: "/avatar.png", banner: null };
 
   const posts = [
     { id: 1, title: "My First Blog", excerpt: "This is about my journey..." },
@@ -44,7 +45,6 @@ export default function Home() {
   return (
     <>
       <SeasonTheme />
-
       {/* Navbar */}
       <nav className="w-full fixed top-0 left-0 flex items-center justify-between px-8 py-4 mb-8 bg-transparent z-50">
         {/* Left side: logo + title */}
@@ -120,16 +120,33 @@ export default function Home() {
       <main className="grid grid-cols-1 md:grid-cols-4 gap-6 p-6 bg-[var(--color-background)] min-h-screen pt-20">
         {/* Left Sidebar (Profile + Followers) */}
         <aside className="md:col-span-1 space-y-6">
-          <div className="bg-[var(--color-surface)] p-4 rounded-xl shadow min-h-80 flex flex-col justify-center">
-            <Image
-              src={user.avatar}
-              alt={user.name}
-              width={80}
-              height={80} 
-              className="w-20 h-20 rounded-full mx-auto"
-            />
-            <h2 className="text-center text-lg font-bold mt-2">{user.name}</h2>
-            <p className="text-center text-sm">{user.bio}</p>
+          <div className="bg-[var(--color-surface)] rounded-xl shadow min-h-80 relative overflow-hidden flex flex-col justify-start">
+            {user.banner && (
+              <Image
+                src={user.banner}
+                alt="Profile banner"
+                width={400}
+                height={120}
+                className="absolute top-0 left-0 w-full h-[7.5rem] object-cover"
+                priority
+              />
+            )}
+            <div
+              className="p-4 flex flex-row items-center justify-start gap-4 relative z-10"
+              style={{ marginTop: '6rem' }}
+            >
+              <Image
+                src={user.avatar}
+                alt={user.name}
+                width={80}
+                height={80}
+                className="w-20 h-20 rounded-full border-4 border-[var(--color-surface)] -mt-5"
+              />
+              <div>
+                <h2 className="text-left text-lg font-bold">{user.name}</h2>
+                <p className="text-left text-xs line-clamp-2 mt-0">{user.bio}</p>
+              </div>
+            </div>
           </div>
           <div className="bg-[var(--color-surface)] p-4 rounded-xl shadow">
             <h3 className="font-semibold mb-2">Followers</h3>
