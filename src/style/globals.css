@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @tailwind base;
@@ -7,6 +8,7 @@
 @tailwind utilities;
 
 :root {
+	--font-garamond: 'EB Garamond', serif;
 	--font-sans: 'Manrope', sans-serif;
 	--font-title: 'Lora', serif;
 	--radius: 0.625rem;
@@ -84,7 +86,7 @@
 	--color-surface: #fae3d9;
 	--color-primary: #f97316;
 	--color-secondary: #c28b47;
-	--color-accent: #8b4513;
+	--color-accent: #e44b3a;
 	--color-text: #3d2c29;
 }
 
@@ -93,7 +95,7 @@
 	--color-surface: #2a211b;
 	--color-primary: #f97316;
 	--color-secondary: #c28b47;
-	--color-accent: #8b4513;
+	--color-accent: #ff5a41;
 	--color-text: #f3ede7;
 }
 

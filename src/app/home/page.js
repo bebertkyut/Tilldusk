@@ -23,14 +23,15 @@ export default function Home() {
 
   const { profile } = useProfile();
 
-  const user = profile
-    ? {
+const user = profile
+  ? {
       name: profile.display_name,
+      username: profile.username,
       bio: profile.bio,
       avatar: profile.avatar_url || "/avatar.png",
       banner: profile.banner || null,
     }
-  : { name: "", bio: "", avatar: "/avatar.png", banner: null };
+  : { name: "", username: "", bio: "", avatar: "/avatar.png", banner: null };
 
   const posts = [
     { id: 1, title: "My First Blog", excerpt: "This is about my journey..." },
@@ -135,18 +136,35 @@ export default function Home() {
               className="p-4 flex flex-row items-center justify-start gap-4 relative z-10"
               style={{ marginTop: '6rem' }}
             >
-              <Image
-                src={user.avatar}
-                alt={user.name}
-                width={80}
-                height={80}
-                className="w-20 h-20 rounded-full border-4 border-[var(--color-surface)] -mt-5"
-              />
+              <div className="flex flex-col items-center">
+                <Image
+                  src={user.avatar}
+                  alt={user.name}
+                  width={80}
+                  height={80}
+                  className="w-20 h-20 rounded-full border-4 border-[var(--color-surface)] -mt-5"
+                />
+              </div>
               <div>
                 <h2 className="text-left text-lg font-bold">{user.name}</h2>
-                <p className="text-left text-xs line-clamp-2 mt-0">{user.bio}</p>
+                <p className="text-left text-xs line-clamp-2 mt-0">{user.username}</p>
               </div>
             </div>
+            <div className="flex flex-col">
+              <span
+                style={{ fontFamily: "var(--font-garamond)" }}
+                className="italic font-bold text-lg ml-4"
+              >
+                and I Quote
+              </span>
+              <span
+                style={{ fontFamily: "var(--font-garamond)" }}
+                className="text-md italic mt-1 text-center"
+              >
+                “{user.bio || ""}”
+              </span>
+            </div>
+            
           </div>
           <div className="bg-[var(--color-surface)] p-4 rounded-xl shadow">
             <h3 className="font-semibold mb-2">Followers</h3>

@@ -69,7 +69,7 @@ export default function SignInPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 w-full rounded-md border border-[var(--color-text)] p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)]"
+                className="mt-1 w-full rounded-md border border-[var(--color-text)] p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
                 required
               />
             </div>
@@ -82,7 +82,7 @@ export default function SignInPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 w-full rounded-md border border-[var(--color-text)] p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)]"
+                className="mt-1 w-full rounded-md border border-[var(--color-text)] p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
                 required
               />
             </div>
@@ -92,7 +92,7 @@ export default function SignInPage() {
             <button
               onClick={handleSignIn}
               disabled={loading}
-              className="w-full rounded-md px-4 py-2 text-white font-medium hover:bg-indigo-700 transition"
+              className="w-full rounded-md px-4 py-2 text-white font-medium transition"
               style={{ background: `var(--color-primary)` }}
             >
               {loading ? "Signing in..." : "Sign in"}
@@ -100,8 +100,8 @@ export default function SignInPage() {
             <button
               onClick={() => router.push("/signUp")}
               disabled={loading}
-              className="w-full rounded-md px-4 py-2 text-black font-medium hover:bg-indigo-700 transition"
-              style={{ background: `var(--color-accent)` }}
+              className="w-full rounded-md px-4 py-2 text-white font-medium transition"
+              style={{ background: `var(--color-secondary)` }}
             >
               Sign up
             </button>
