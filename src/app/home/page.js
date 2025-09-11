@@ -4,6 +4,10 @@ import Link from "next/link";
 import { useTheme } from "../../context/ThemeContext";
 import { useProfile } from "@/hooks/useProfile";
 import { SeasonTheme } from "../../components/SeasonTheme";
+import { useSpinOnClick } from "@/hooks/animations";
+import { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
+import { GearIcon } from "@/components/ui/icons";
 import {
   Select,
   SelectContent,
@@ -20,18 +24,47 @@ import {
 
 export default function Home() {
   const { season, setSeason, mode, setMode } = useTheme();
-
   const { profile } = useProfile();
+  const [handleGearClick, spinMotion] = useSpinOnClick();
+  const [showDropdown, setShowDropdown] = useState(false);
+  const buttonRef = useRef(null);
+  const dropdownRef = useRef(null);
 
-const user = profile
-  ? {
-      name: profile.display_name,
-      username: profile.username,
-      bio: profile.bio,
-      avatar: profile.avatar_url || "/avatar.png",
-      banner: profile.banner || null,
+  // Toggle dropdown and spin
+  const handleSettingsClick = (e) => {
+    handleGearClick(showDropdown ? -1 : 1, e);
+    setShowDropdown((prev) => !prev);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target) &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target)
+      ) {
+        setShowDropdown(false);
+      }
     }
-  : { name: "", username: "", bio: "", avatar: "/avatar.png", banner: null };
+    if (showDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDropdown]);
+
+  const user = profile
+    ? {
+        name: profile.display_name,
+        username: profile.username,
+        bio: profile.bio,
+        avatar: profile.avatar_url || "/avatar.png",
+        banner: profile.banner || null,
+      }
+    : { name: "", username: "", bio: "", avatar: "/avatar.png", banner: null };
 
   const posts = [
     { id: 1, title: "My First Blog", excerpt: "This is about my journey..." },
@@ -114,6 +147,49 @@ const user = profile
           >
             Home
           </Link>
+          <button
+            type="button"
+            className="ml-2 p-2 rounded-full transition group hover:bg-[var(--color-primary)/10] relative"
+            aria-label="Settings"
+            onClick={handleSettingsClick}
+            ref={buttonRef}
+          >
+            <GearIcon
+              as={motion.svg}
+              width={24}
+              height={24}
+              className={`transition-colors group-hover:text-[var(--color-primary)] ${
+                showDropdown
+                  ? "text-[var(--color-primary)]"
+                  : "text-[var(--color-text)]"
+              }`}
+              animate={spinMotion}
+              transition={{ duration: 0.5, ease: "linear" }}
+            />
+            {showDropdown && (
+            <div
+              ref={dropdownRef}
+              className="fixed top-[4.5rem] right-0 w-25 max-w-full bg-[var(--color-surface)] rounded shadow-lg z-50 py-2"
+            >
+              <div
+                tabIndex={0}
+                role="button"
+                className="block w-full text-left px-4 py-2 cursor-pointer text-sm hover:bg-[var(--color-surface-hover)]"
+                onClick={() => {/* handle settings click */}}
+              >
+                Settings
+              </div>
+              <div
+                tabIndex={0}
+                role="button"
+                className="block w-full text-left px-4 py-2 cursor-pointer text-sm hover:bg-[var(--color-surface-hover)]"
+                onClick={() => {/* handle logout click */}}
+              >
+                Logout
+              </div>
+            </div>
+          )}
+          </button>
         </div>
       </nav>
 
@@ -150,7 +226,7 @@ const user = profile
                 <p className="text-left text-xs line-clamp-2 mt-0">{user.username}</p>
               </div>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col px-4">
               <span
                 style={{ fontFamily: "var(--font-garamond)" }}
                 className="italic font-bold text-lg ml-4"
@@ -159,12 +235,21 @@ const user = profile
               </span>
               <span
                 style={{ fontFamily: "var(--font-garamond)" }}
-                className="text-md italic mt-1 text-center"
+                className="text-md mt-1 text-center"
               >
                 “{user.bio || ""}”
               </span>
             </div>
-            
+            <div className="mt-5">
+              <div className="flex gap-4 mt-1 justify-center mb-4">
+                <span className="text-xs font-semibold">
+                  {10} Following
+                </span>
+                <span className="text-xs font-semibold">
+                  {10} Followers
+                </span>
+              </div>
+            </div>
           </div>
           <div className="bg-[var(--color-surface)] p-4 rounded-xl shadow">
             <h3 className="font-semibold mb-2">Followers</h3>

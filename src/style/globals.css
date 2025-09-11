@@ -48,7 +48,9 @@
 :root[data-theme='light-spring'] {
 	--color-background: #fdfcf9;
 	--color-surface: #f9f5f0;
+	--color-surface-hover: #f0ece6;
 	--color-primary: #ec4899;
+	--color-primary-hover: #f472b6;
 	--color-secondary: #22d3ee;
 	--color-accent: #86efac;
 	--color-text: #4b4453;
@@ -57,7 +59,9 @@
 :root[data-theme='dark-spring'] {
 	--color-background: #1e1b2e;
 	--color-surface: #2b253f;
+	--color-surface-hover: #362c52;
 	--color-primary: #ec4899;
+	--color-primary-hover: #f472b6;
 	--color-secondary: #22d3ee;
 	--color-accent: #86efac;
 	--color-text: #e9e9f9;
@@ -66,7 +70,9 @@
 :root[data-theme='light-summer'] {
 	--color-background: #fff3d8;
 	--color-surface: #ffe9c9;
+	--color-surface-hover: #ffe0b3;
 	--color-primary: #f59e0b;
+	--color-primary-hover: #fbbf24;
 	--color-secondary: #3b82f6;
 	--color-accent: #fbbf24;
 	--color-text: #3d2c1f;
@@ -75,7 +81,9 @@
 :root[data-theme='dark-summer'] {
 	--color-background: #1c1c29;
 	--color-surface: #2b2a3c;
+	--color-surface-hover: #35344a;
 	--color-primary: #f59e0b;
+	--color-primary-hover: #fbbf24;
 	--color-secondary: #38bdf8;
 	--color-accent: #facc15;
 	--color-text: #f3f4f6;
@@ -84,7 +92,9 @@
 :root[data-theme='light-autumn'] {
 	--color-background: #fff8f0;
 	--color-surface: #fae3d9;
+	--color-surface-hover: #f7d1c0;
 	--color-primary: #f97316;
+	--color-primary-hover: #fb923c;
 	--color-secondary: #c28b47;
 	--color-accent: #e44b3a;
 	--color-text: #3d2c29;
@@ -93,7 +103,9 @@
 :root[data-theme='dark-autumn'] {
 	--color-background: #1b1511;
 	--color-surface: #2a211b;
+	--color-surface-hover: #35291f;
 	--color-primary: #f97316;
+	--color-primary-hover: #fb923c;
 	--color-secondary: #c28b47;
 	--color-accent: #ff5a41;
 	--color-text: #f3ede7;
@@ -102,7 +114,9 @@
 :root[data-theme='light-winter'] {
 	--color-background: #f0f4f8;
 	--color-surface: #e3eaf2;
+	--color-surface-hover: #d4dee8;
 	--color-primary: #60a5fa;
+	--color-primary-hover: #38bdf8;
 	--color-secondary: #818cf8;
 	--color-accent: #93c5fd;
 	--color-text: #1e293b;
@@ -111,7 +125,9 @@
 :root[data-theme='dark-winter'] {
 	--color-background: #0e1a2b;
 	--color-surface: #1a293b;
+	--color-surface-hover: #24344b;
 	--color-primary: #60a5fa;
+	--color-primary-hover: #38bdf8;
 	--color-secondary: #818cf8;
 	--color-accent: #93c5fd;
 	--color-text: #dce4f2;
@@ -206,4 +222,13 @@ body {
 	body {
 		@apply bg-background text-foreground;
 	}
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+.spin {
+	animation: spin 1s linear infinite;
 }
