@@ -1,13 +1,14 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import SettingsModal from "@/components/settingsModal";
 import { useTheme } from "../../context/ThemeContext";
 import { useProfile } from "@/hooks/useProfile";
-import { SeasonTheme } from "../../components/SeasonTheme";
-import { useSpinOnClick } from "@/hooks/animations";
+import { SeasonTheme } from "@/components/SeasonTheme";
+import { useGearSpinOnClick, useBellShakeOnClick } from "@/hooks/useAnimations";
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { GearIcon } from "@/components/ui/icons";
+import { GearIcon, BellIcon } from "@/components/ui/icons";
 import {
   Select,
   SelectContent,
@@ -25,15 +26,24 @@ import {
 export default function Home() {
   const { season, setSeason, mode, setMode } = useTheme();
   const { profile } = useProfile();
-  const [handleGearClick, spinMotion] = useSpinOnClick();
+  const [handleGearClick, spinMotion] = useGearSpinOnClick();
+  const [handleBellShake, shakeMotion] = useBellShakeOnClick(); 
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
   const buttonRef = useRef(null);
   const dropdownRef = useRef(null);
 
   // Toggle dropdown and spin
   const handleSettingsClick = (e) => {
-    handleGearClick(showDropdown ? -1 : 1, e);
+    handleGearClick(e);
     setShowDropdown((prev) => !prev);
+  };
+
+  // Open settings modal and close dropdown
+  const openSettingsModal = (e) => {
+    e.stopPropagation();
+    setShowDropdown(false);
+    setShowSettingsModal(true);
   };
 
   // Close dropdown when clicking outside
@@ -61,10 +71,10 @@ export default function Home() {
         name: profile.display_name,
         username: profile.username,
         bio: profile.bio,
-        avatar: profile.avatar_url || "/avatar.png",
-        banner: profile.banner || null,
+        avatar: profile.avatar_url,
+        banner: profile.banner,
       }
-    : { name: "", username: "", bio: "", avatar: "/avatar.png", banner: null };
+    : { name: "", username: "", bio: "", avatar: null, banner: null };
 
   const posts = [
     { id: 1, title: "My First Blog", excerpt: "This is about my journey..." },
@@ -140,13 +150,20 @@ export default function Home() {
               />
             </button>
           </label>
-
-          <Link
-            href="/"
-            className="button-primary px-4 py-2 text-white rounded font-semibold hover:opacity-90 transition"
+          <button
+            type="button"
+            className="ml-2 p-2 rounded-full transition group hover:bg-[var(--color-primary)/10] relative"
+            aria-label="Notifications"
+            onClick={handleBellShake}
           >
-            Home
-          </Link>
+            <BellIcon
+              as={motion.svg}
+              width={24}
+              height={24}
+              className="transition-colors text-[var(--color-text)] group-hover:text-[var(--color-primary)]"
+              animate={shakeMotion}
+            />
+          </button>
           <button
             type="button"
             className="ml-2 p-2 rounded-full transition group hover:bg-[var(--color-primary)/10] relative"
@@ -164,32 +181,30 @@ export default function Home() {
                   : "text-[var(--color-text)]"
               }`}
               animate={spinMotion}
-              transition={{ duration: 0.5, ease: "linear" }}
             />
             {showDropdown && (
-            <div
-              ref={dropdownRef}
-              className="fixed top-[4.5rem] right-0 w-25 max-w-full bg-[var(--color-surface)] rounded shadow-lg z-50 py-2"
-            >
               <div
-                tabIndex={0}
-                role="button"
-                className="block w-full text-left px-4 py-2 cursor-pointer text-sm hover:bg-[var(--color-surface-hover)]"
-                onClick={() => {/* handle settings click */}}
+                ref={dropdownRef}
+                className="fixed top-[4.5rem] right-0 w-25 max-w-full bg-[var(--color-surface)] rounded shadow-lg z-50 py-2"
               >
-                Settings
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="block w-full text-left px-4 py-2 cursor-pointer text-sm hover:bg-[var(--color-surface-hover)]"
+                  onClick={openSettingsModal}
+                >
+                  Settings
+                </div>
+                <Link
+                  href="/"
+                  className="block w-full text-left px-4 py-2 cursor-pointer text-sm hover:bg-[var(--color-surface-hover)]"
+                >
+                  Logout
+                </Link>
               </div>
-              <div
-                tabIndex={0}
-                role="button"
-                className="block w-full text-left px-4 py-2 cursor-pointer text-sm hover:bg-[var(--color-surface-hover)]"
-                onClick={() => {/* handle logout click */}}
-              >
-                Logout
-              </div>
-            </div>
-          )}
+            )}
           </button>
+          <SettingsModal isOpen={showSettingsModal} onClose={() => setShowSettingsModal(false)} />
         </div>
       </nav>
 
@@ -213,13 +228,15 @@ export default function Home() {
               style={{ marginTop: '6rem' }}
             >
               <div className="flex flex-col items-center">
-                <Image
-                  src={user.avatar}
-                  alt={user.name}
-                  width={80}
-                  height={80}
-                  className="w-20 h-20 rounded-full border-4 border-[var(--color-surface)] -mt-5"
-                />
+                {user.avatar && (
+                  <Image
+                    src={user.avatar}
+                    alt={user.name}
+                    width={80}
+                    height={80}
+                    className="w-20 h-20 rounded-full border-4 border-[var(--color-surface)] -mt-5"
+                  />
+                )}
               </div>
               <div>
                 <h2 className="text-left text-lg font-bold">{user.name}</h2>

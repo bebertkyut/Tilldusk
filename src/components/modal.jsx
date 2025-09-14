@@ -12,7 +12,7 @@ export default function Modal({ isOpen, onClose, children }) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-      <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md relative">
+      <div className="bg-[var(--color-surface)] text-[var(--color-text)] rounded-xl shadow-lg p-6 min-w-md relative">
         <button className="absolute top-2 right-2" onClick={onClose}>
           ✖
         </button>
