@@ -1,7 +1,9 @@
 "use client";
+import { getThemeKey } from "@/app/utils/theme";
 import { useState } from "react";
 import { useTheme } from "../context/ThemeContext"
 import { useSettings } from "@/hooks/useSettings";
+import { useEffect } from "react";
 import Modal from "./modal";
 
 import {
@@ -22,6 +24,26 @@ export default function SettingsModal({ isOpen, onClose }) {
   const [activeTab, setActiveTab] = useState("aesthetic");
   const { season, setSeason, mode, setMode } = useTheme();
   const { settings, updateSettings } = useSettings();
+
+  // Sync context state with database when modal opens
+  useEffect(() => {
+    if (!isOpen && settings) {
+      const themeKey = getThemeKey(settings.season, settings.mode);
+      document.documentElement.setAttribute("data-theme", themeKey);
+      setSeason(settings.season);
+      setMode(settings.mode);
+    }
+  }, [isOpen, settings, setSeason, setMode]);
+
+
+  // Apply dynamic theme when season or mode changes
+  useEffect(() => {
+    if (isOpen) {
+      const themeKey = getThemeKey(season, mode);
+      document.documentElement.setAttribute("data-theme", themeKey);
+    }
+  }, [season, mode, isOpen]);
+
 
   const handleSave = async () => {
     await updateSettings({ season, mode });

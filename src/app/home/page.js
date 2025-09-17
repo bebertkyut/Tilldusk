@@ -2,26 +2,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import SettingsModal from "@/components/settingsModal";
-import { ThemeProvider } from "@/context/ThemeContext";
+import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { useProfile } from "@/hooks/useProfile";
 import { useGearSpinOnClick, useBellShakeOnClick } from "@/hooks/useAnimations";
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { GearIcon, BellIcon } from "@/components/ui/icons";
 import { getThemeKey } from "@/app/utils/theme";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  SpringIcon,
-  SummerIcon,
-  AutumnIcon,
-  WinterIcon,
-} from "@/components/SeasonIcons";
 
 export default function Home() {
   const { profile } = useProfile();
@@ -128,47 +115,6 @@ export default function Home() {
 
         {/* Right side: season select + mode toggle + home link */}
         <div className="flex items-center gap-2">
-          <Select value={season} onValueChange={setSeason}>
-            <SelectTrigger
-              className={`min-w-fit w-12 rounded-xl px-2 py-2 border-0 shadow-sm bg-[var(--color-surface)] ${
-                mode === "dark" ? "shadow-white/20" : "shadow-lg"
-              }`}
-            >
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent
-              className={`min-w-fit w-12 border-0 shadow-lg bg-[var(--color-surface)] ${
-                mode === "dark" ? "shadow-white/20" : ""
-              }`}
-            >
-              <SelectItem value="spring"><SpringIcon /></SelectItem>
-              <SelectItem value="summer"><SummerIcon /></SelectItem>
-              <SelectItem value="autumn"><AutumnIcon /></SelectItem>
-              <SelectItem value="winter"><WinterIcon /></SelectItem>
-            </SelectContent>
-          </Select>
-
-          {/* Mode toggle */}
-          <label className="flex items-center cursor-pointer">
-            <span className="mr-2 font-semibold">
-              {mode === "light" ? "Light" : "Dark"}
-            </span>
-            <button
-              type="button"
-              aria-pressed={mode === "dark"}
-              onClick={() => setMode(mode === "light" ? "dark" : "light")}
-              className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors focus:outline-none ${
-                mode === "dark" ? "" : "bg-gray-300"
-              }`}
-              style={mode === "dark" ? { backgroundColor: "var(--color-primary)" } : {}}
-            >
-              <span
-                className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
-                  mode === "dark" ? "translate-x-6" : "translate-x-1"
-                }`}
-              />
-            </button>
-          </label>
           <button
             type="button"
             className="ml-2 p-2 rounded-full transition group hover:bg-[var(--color-primary)/10] relative"
