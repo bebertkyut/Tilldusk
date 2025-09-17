@@ -3,9 +3,9 @@ import { createContext, useContext, useState } from "react";
 
 const ThemeContext = createContext();
 
-export function ThemeProvider({ children }) {
-  const [season, setSeason] = useState("spring");
-  const [mode, setMode] = useState("light");
+export function ThemeProvider({ children, initialSeason = "spring", initialMode = "light" }) {
+  const [season, setSeason] = useState(initialSeason);
+  const [mode, setMode] = useState(initialMode);
 
   return (
     <ThemeContext.Provider value={{ season, setSeason, mode, setMode }}>

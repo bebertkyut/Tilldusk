@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
 import { useTheme } from "../context/ThemeContext"
+import { useSettings } from "@/hooks/useSettings";
 import Modal from "./modal";
+
 import {
   Select,
   SelectContent,
@@ -19,6 +21,11 @@ import {
 export default function SettingsModal({ isOpen, onClose }) {
   const [activeTab, setActiveTab] = useState("aesthetic");
   const { season, setSeason, mode, setMode } = useTheme();
+  const { settings, updateSettings } = useSettings();
+
+  const handleSave = async () => {
+    await updateSettings({ season, mode });
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -89,8 +96,12 @@ export default function SettingsModal({ isOpen, onClose }) {
                       </SelectContent>
                   </Select>
                 </div>
-                <button className="px-8 py-1.5 mt-2 bg-[var(--color-primary)] text-[var(--color-white)] text-sm hover:bg-[var(--color-primary-hover)] rounded-md">
-                    Save
+                <button 
+                  className="px-8 py-1.5 mt-2 bg-[var(--color-primary)] text-[var(--color-white)] text-sm hover:bg-[var(--color-primary-hover)] rounded-md"
+                  onClick={handleSave}
+                >
+                    
+                  Save
                 </button>
               </>
             )}

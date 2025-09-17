@@ -2,13 +2,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import SettingsModal from "@/components/settingsModal";
-import { useTheme } from "../../context/ThemeContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import { useProfile } from "@/hooks/useProfile";
-import { SeasonTheme } from "@/components/SeasonTheme";
 import { useGearSpinOnClick, useBellShakeOnClick } from "@/hooks/useAnimations";
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { GearIcon, BellIcon } from "@/components/ui/icons";
+import { getThemeKey } from "@/app/utils/theme";
 import {
   Select,
   SelectContent,
@@ -24,7 +24,6 @@ import {
 } from "@/components/SeasonIcons";
 
 export default function Home() {
-  const { season, setSeason, mode, setMode } = useTheme();
   const { profile } = useProfile();
   const [handleGearClick, spinMotion] = useGearSpinOnClick();
   const [handleBellShake, shakeMotion] = useBellShakeOnClick(); 
@@ -32,6 +31,21 @@ export default function Home() {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const buttonRef = useRef(null);
   const dropdownRef = useRef(null);
+  const [season, setSeason] = useState(profile?.season);
+  const [mode, setMode] = useState(profile?.mode);
+
+  useEffect(() => {
+    if (profile) {
+      setSeason(profile.season);
+      setMode(profile.mode);
+    }
+  }, [profile]);
+
+  // If profile changes, update season and mode
+  useEffect(() => {
+    const themeKey = getThemeKey(season, mode);
+    document.documentElement.setAttribute("data-theme", themeKey);
+  }, [season, mode]);
 
   // Toggle dropdown and spin
   const handleSettingsClick = (e) => {
@@ -73,8 +87,10 @@ export default function Home() {
         bio: profile.bio,
         avatar: profile.avatar_url,
         banner: profile.banner,
+        season: profile.season,
+        mode: profile.mode,
       }
-    : { name: "", username: "", bio: "", avatar: null, banner: null };
+    : { name: "", username: "", bio: "", avatar: null, banner: null, season: "", mode: "" };
 
   const posts = [
     { id: 1, title: "My First Blog", excerpt: "This is about my journey..." },
@@ -88,7 +104,10 @@ export default function Home() {
 
   return (
     <>
-      <SeasonTheme />
+      <ThemeProvider
+        initialSeason={profile?.season}
+        initialMode={profile?.mode}
+      >
       {/* Navbar */}
       <nav className="w-full fixed top-0 left-0 flex items-center justify-between px-8 py-4 mb-8 bg-transparent z-50">
         {/* Left side: logo + title */}
@@ -320,6 +339,7 @@ export default function Home() {
           </div>
         </aside>
       </main>
+      </ThemeProvider>
     </>
   );
 }

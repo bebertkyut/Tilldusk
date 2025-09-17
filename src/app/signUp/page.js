@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabaseClient"
-import { SeasonTheme } from "../../components/SeasonTheme"
+import { ThemeProvider } from "@/context/ThemeContext";
 
 // Reusable modal inside this page
 function SuccessModal({ isOpen, onClose }) {
@@ -65,7 +65,10 @@ export default function SignUpPage() {
 
   return (
     <>
-      <SeasonTheme />
+      <ThemeProvider
+        initialSeason={profile?.season || "spring"}
+        initialMode={profile?.mode || "light"}
+      />
       <main
         className="flex min-h-screen items-center justify-center px-4"
         style={{ background: `var(--color-background)` }}

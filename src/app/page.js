@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { SeasonTheme } from "../components/SeasonTheme";
 import { useTheme } from "../context/ThemeContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import {
   Select,
   SelectContent,
@@ -18,7 +18,10 @@ export default function Landing() {
 
   return (
     <>
-      <SeasonTheme />
+      <ThemeProvider
+        initialSeason={profile?.season || "spring"}
+        initialMode={profile?.mode || "light"}
+      >
       {/* Navbar */}
       <nav className="w-full fixed top-0 left-0 flex items-center justify-between px-8 py-4 mb-8 bg-transparent z-50">
         {/* Left side: logo + title */}
@@ -137,6 +140,7 @@ export default function Landing() {
         </button>
         </div>
       </section>
+      </ThemeProvider>
     </>
   );
 }
