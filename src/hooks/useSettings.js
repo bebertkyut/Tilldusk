@@ -26,7 +26,7 @@ export function useSettings() {
       }
 
       const { data, error } = await supabase
-        .from("profiles")
+        .from("users")
         .select("season, mode")
         .eq("id", user.id)
         .single();
@@ -56,7 +56,7 @@ export function useSettings() {
     }
 
     const { data, error } = await supabase
-      .from("profiles")
+      .from("users")
       .update(updates)
       .eq("id", user.id)
       .select()

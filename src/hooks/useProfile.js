@@ -14,7 +14,7 @@ export function useProfile() {
       setLoading(true);
       // TODO: Replace with actual user id from auth
       const { data, error } = await supabase
-        .from("profiles")
+        .from("users")
         .select("display_name, bio, username, avatar_url, banner, season, mode")
         .limit(1)
         .single();
