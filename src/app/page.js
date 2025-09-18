@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useTheme } from "../context/ThemeContext";
-import { ThemeProvider } from "@/context/ThemeContext";
+import { useTheme } from "@/context/ThemeContext";
+import { useEffect } from "react";
+import { getThemeKey } from "@/app/utils/theme";
 import {
   Select,
   SelectContent,
@@ -16,12 +17,14 @@ export default function Landing() {
   const { season, setSeason, mode, setMode } = useTheme();
   const router = useRouter();
 
+  // Dynamically update theme as user changes season/mode
+  useEffect(() => {
+    const themeKey = getThemeKey(season, mode);
+    document.documentElement.setAttribute("data-theme", themeKey);
+  }, [season, mode]);
+
   return (
     <>
-      <ThemeProvider
-        initialSeason={profile?.season || "spring"}
-        initialMode={profile?.mode || "light"}
-      >
       {/* Navbar */}
       <nav className="w-full fixed top-0 left-0 flex items-center justify-between px-8 py-4 mb-8 bg-transparent z-50">
         {/* Left side: logo + title */}
@@ -140,7 +143,6 @@ export default function Landing() {
         </button>
         </div>
       </section>
-      </ThemeProvider>
     </>
   );
 }

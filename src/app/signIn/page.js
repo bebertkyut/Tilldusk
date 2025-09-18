@@ -3,7 +3,8 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabaseClient"
-import { ThemeProvider } from "@/context/ThemeContext";
+import { useEffect } from "react"
+import { getThemeKey } from "@/app/utils/theme"
 
 export default function SignInPage() {
   const [email, setEmail] = useState("")
@@ -12,21 +13,53 @@ export default function SignInPage() {
   const [error, setError] = useState("")
   const router = useRouter()
 
+  // Always set default theme if not already set
+  useEffect(() => {
+    const defaultTheme = getThemeKey();
+    document.body.classList.add(defaultTheme);
+
+    return () => {
+      document.body.classList.remove(defaultTheme);
+    };
+  }, []);
+  
   const handleSignIn = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-    if (error) {
-      setError(error.message)
-    } else {
-      router.push("/home")
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    let loginEmail = email.trim();
+
+    // Check if input is not an email (treat as username)
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginEmail)) {
+      const { data, error: userError } = await supabase
+        .from("profiles")
+        .select("email")
+        .ilike("username", loginEmail)
+        .single();
+
+      console.log("Username lookup result:", { data, userError });
+
+      if (userError || !data) {
+        setError("Username not found");
+        setLoading(false);
+        return;
+      }
+      loginEmail = data.email;
     }
-    setLoading(false)
-  }
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email: loginEmail,
+      password,
+    });
+
+    if (error) {
+      setError(error.message);
+    } else {
+      router.push("/home");
+    }
+    setLoading(false);
+  };
 
   const handleGitHubLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
@@ -40,93 +73,88 @@ export default function SignInPage() {
 
   return (
     <>
-      <ThemeProvider
-        initialSeason={profile?.season || "spring"}
-        initialMode={profile?.mode || "light"}
+      <main
+        className="flex min-h-screen items-center justify-center px-4"
+        style={{ background: `var(--color-background)` }}
       >
-        <main
-          className="flex min-h-screen items-center justify-center px-4"
-          style={{ background: `var(--color-background)` }}
+        <div
+          className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl"
+          style={{ background: `var(--color-surface)` }}
         >
-          <div
-            className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl"
-            style={{ background: `var(--color-surface)` }}
+          {/* Title */}
+          <h1
+            className="mb-6 text-center text-2xl font-bold"
+            style={{ color: `var(--color-text)` }}
           >
-            {/* Title */}
-            <h1
-              className="mb-6 text-center text-2xl font-bold"
-              style={{ color: `var(--color-text)` }}
-            >
-              <span style={{ fontFamily: "var(--font-title)" }}>
-                Sign in to Tildusk
-              </span>
-            </h1>
+            <span style={{ fontFamily: "var(--font-title)" }}>
+              Sign in to Tildusk
+            </span>
+          </h1>
 
-            {/* Username & Password */}
-            <form className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-[var(--color-text)]">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1 w-full rounded-md border border-[var(--color-text)] p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-[var(--color-text)]">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="mt-1 w-full rounded-md border border-[var(--color-text)] p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
-                  required
-                />
-              </div>
-
-              {error && <p className="text-red-500 text-sm">{error}</p>}
-
-              <button
-                onClick={handleSignIn}
-                disabled={loading}
-                className="w-full rounded-md px-4 py-2 text-white font-medium transition"
-                style={{ background: `var(--color-primary)` }}
-              >
-                {loading ? "Signing in..." : "Sign in"}
-              </button>
-              <button
-                onClick={() => router.push("/signUp")}
-                disabled={loading}
-                className="w-full rounded-md px-4 py-2 text-white font-medium transition"
-                style={{ background: `var(--color-secondary)` }}
-              >
-                Sign up
-              </button>
-            </form>
-
-            {/* Divider */}
-            <div className="my-6 flex items-center">
-              <div className="flex-grow border-t border-[var(--color-text)]"></div>
-              <span className="mx-2 text-sm text-[var(--color-text)]">or</span>
-              <div className="flex-grow border-t border-[var(--color-text)]"></div>
+          {/* Username & Password */}
+          <form className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-[var(--color-text)]">
+                Email
+              </label>
+              <input
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="mt-1 w-full rounded-md border border-[var(--color-text)] p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
+                required
+              />
             </div>
 
-            {/* GitHub OAuth */}
+            <div>
+              <label className="block text-sm font-medium text-[var(--color-text)]">
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="mt-1 w-full rounded-md border border-[var(--color-text)] p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
+                required
+              />
+            </div>
+
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+
             <button
-              onClick={handleGitHubLogin}
-              className="w-full rounded-md bg-black px-4 py-2 text-white font-medium hover:bg-gray-800 transition"
+              onClick={handleSignIn}
+              disabled={loading}
+              className="w-full rounded-md px-4 py-2 text-white font-medium transition"
+              style={{ background: `var(--color-primary)` }}
             >
-              Sign in with GitHub
+              {loading ? "Signing in..." : "Sign in"}
             </button>
+            <button
+              onClick={() => router.push("/signUp")}
+              disabled={loading}
+              className="w-full rounded-md px-4 py-2 text-white font-medium transition"
+              style={{ background: `var(--color-secondary)` }}
+            >
+              Sign up
+            </button>
+          </form>
+
+          {/* Divider */}
+          <div className="my-6 flex items-center">
+            <div className="flex-grow border-t border-[var(--color-text)]"></div>
+            <span className="mx-2 text-sm text-[var(--color-text)]">or</span>
+            <div className="flex-grow border-t border-[var(--color-text)]"></div>
           </div>
-        </main>
-      </ThemeProvider>
+
+          {/* GitHub OAuth */}
+          <button
+            onClick={handleGitHubLogin}
+            className="w-full rounded-md bg-black px-4 py-2 text-white font-medium hover:bg-gray-800 transition"
+          >
+            Sign in with GitHub
+          </button>
+        </div>
+      </main>
     </>
   )
 }

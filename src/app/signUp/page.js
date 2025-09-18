@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabaseClient"
-import { ThemeProvider } from "@/context/ThemeContext";
+import { useTheme } from "@/context/ThemeContext"
 
 // Reusable modal inside this page
 function SuccessModal({ isOpen, onClose }) {
@@ -35,6 +35,7 @@ export default function SignUpPage() {
   const [error, setError] = useState("")
   const [successModal, setSuccessModal] = useState(false)
   const router = useRouter()
+  const { season, mode } = useTheme() // <-- get current theme
 
   const handleSignUp = async (e) => {
     e.preventDefault()
@@ -65,10 +66,6 @@ export default function SignUpPage() {
 
   return (
     <>
-      <ThemeProvider
-        initialSeason={profile?.season || "spring"}
-        initialMode={profile?.mode || "light"}
-      />
       <main
         className="flex min-h-screen items-center justify-center px-4"
         style={{ background: `var(--color-background)` }}
@@ -97,7 +94,7 @@ export default function SignUpPage() {
                 type="text"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                className="mt-1 w-full rounded-md border border-[var(--color-text)] p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)]"
+                className="mt-1 w-full rounded-md border border-[var(--color-text)] p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
                 required
               />
             </div>
@@ -109,7 +106,7 @@ export default function SignUpPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 w-full rounded-md border border-[var(--color-text)] p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)]"
+                className="mt-1 w-full rounded-md border border-[var(--color-text)] p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
                 required
               />
             </div>

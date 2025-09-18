@@ -36,7 +36,7 @@ export default function SettingsModal({ isOpen, onClose }) {
   }, [isOpen, settings, setSeason, setMode]);
 
 
-  // Apply dynamic theme when season or mode changes
+  // Dynamically update theme as user changes season/mode
   useEffect(() => {
     if (isOpen) {
       const themeKey = getThemeKey(season, mode);
