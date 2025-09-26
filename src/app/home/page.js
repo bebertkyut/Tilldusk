@@ -2,12 +2,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import SettingsModal from "@/components/settingsModal";
-import { ThemeProvider, useTheme } from "@/context/ThemeContext";
+import CreateBlogModal from "@/components/createBlogModal";
+import { ThemeProvider } from "@/context/ThemeContext";
 import { useProfile } from "@/hooks/useProfile";
 import { useGearSpinOnClick, useBellShakeOnClick } from "@/hooks/useAnimations";
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { GearIcon, BellIcon } from "@/components/ui/icons";
+import { GearIcon, BellIcon, ImgIcon, VideoIcon } from "@/components/ui/icons";
 import { getThemeKey } from "@/app/utils/theme";
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
   const [handleBellShake, shakeMotion] = useBellShakeOnClick(); 
   const [showDropdown, setShowDropdown] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [showCreateBlogModal, setShowCreateBlogModal] = useState(false);
   const buttonRef = useRef(null);
   const dropdownRef = useRef(null);
   const [season, setSeason] = useState(profile?.season);
@@ -254,6 +256,50 @@ export default function Home() {
 
         {/* Main Feed (Posts) */}
         <section className="md:col-span-2 space-y-6">
+          <div className="bg-[var(--color-surface)] p-4 rounded-xl shadow flex flex-col gap-4">
+            <div
+              className="flex-1 w-full flex items-center justify-between border border-[var(--color-text)] hover:border-[var(--color-primary)] px-8 py-2 rounded-full cursor-text bg-transparent"
+              style={{ fontFamily: "var(--font-sans)" }}
+              tabIndex={0}
+              role="button"
+              onClick={() => {
+                setShowCreateBlogModal(true);
+                // handle main tile click (like focusing or opening a modal)
+              }}
+            >
+              <span className="text-gray-500 select-none pointer-events-none">
+                Write your own story...
+              </span>
+              <span className="flex items-center gap-2">
+                <button
+                  type="button"
+                  className="p-2 rounded-full"
+                  aria-label="Add Image"
+                  style={{ color: "var(--color-accent)" }}
+                  onClick={e => {
+                    e.stopPropagation();
+                    alert("Image icon clicked");
+                    // handle image icon click
+                  }}
+                >
+                  <ImgIcon width={20} height={20} />
+                </button>
+                <button
+                  type="button"
+                  className="p-2 rounded-full"
+                  aria-label="Add Video"
+                  style={{ color: "var(--color-accent)" }}
+                  onClick={e => {
+                    e.stopPropagation();
+                    alert("Video icon clicked");
+                    // handle video icon click
+                  }}
+                >
+                  <VideoIcon width={20} height={20} />
+                </button>
+              </span>
+            </div>
+          </div>
           {posts.map((post) => (
             <article
               key={post.id}
@@ -264,6 +310,7 @@ export default function Home() {
             </article>
           ))}
         </section>
+        <CreateBlogModal isOpen={showCreateBlogModal} onClose={() => setShowCreateBlogModal(false)} />
 
         {/* Right Sidebar (Notifications + Suggestions) */}
         <aside className="md:col-span-1 space-y-6">
