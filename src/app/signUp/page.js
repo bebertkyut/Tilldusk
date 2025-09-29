@@ -59,7 +59,7 @@ export default function SignUpPage() {
   const handleGitHubLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "github",
-      options: { redirectTo: "http://tilldusk.vercel.app/home" },
+      options: { redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/home` },
     })
     if (error) setError(error.message)
   }

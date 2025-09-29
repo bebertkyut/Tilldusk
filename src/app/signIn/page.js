@@ -65,7 +65,7 @@ export default function SignInPage() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: "http://tilldusk.vercel.app/home",
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/home`,
       },
     })
     if (error) setError(error.message)
