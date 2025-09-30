@@ -33,7 +33,7 @@ export default function SignInPage() {
     // Check if input is not an email (treat as username)
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginEmail)) {
       const { data, error: userError } = await supabase
-        .from("profiles")
+        .from("users")
         .select("email")
         .ilike("username", loginEmail)
         .single();
@@ -87,7 +87,7 @@ export default function SignInPage() {
             style={{ color: `var(--color-text)` }}
           >
             <span style={{ fontFamily: "var(--font-title)" }}>
-              Sign in to Tildusk
+              Sign in to Tilldusk
             </span>
           </h1>
 

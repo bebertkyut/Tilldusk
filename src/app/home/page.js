@@ -103,7 +103,7 @@ export default function Home() {
         <div className="flex items-center gap-2">
           <Image
             src={mode === "dark" ? "/logo-dark.svg" : "/logo.svg"}
-            alt="Tildusk Owl Logo"
+            alt="Tilldusk Owl Logo"
             width={32}
             height={32}
           />
@@ -111,7 +111,7 @@ export default function Home() {
             className="text-2xl font-extrabold"
             style={{ fontFamily: "var(--font-title)" }}
           >
-            Tildusk
+            Tilldusk
           </span>
         </div>
 

@@ -31,12 +31,12 @@ export default function Landing() {
         <div className="flex items-center gap-2">
           <Image
             src={mode === "dark" ? "/logo-dark.svg" : "/logo.svg"}
-            alt="Tildusk Owl Logo"
+            alt="Tilldusk Owl Logo"
             width={32}
             height={32}
           />
           <span className="text-2xl font-extrabold" style={{ fontFamily: "var(--font-title)" }}>
-            Tildusk
+            Tilldusk
           </span>
         </div>
         {/* Right side: season select, toggle, login */}

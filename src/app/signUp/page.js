@@ -80,7 +80,7 @@ export default function SignUpPage() {
             style={{ color: `var(--color-text)` }}
           >
             <span style={{ fontFamily: "var(--font-title)" }}>
-              Sign up for Tildusk
+              Sign up for TillDusk
             </span>
           </h1>
 
