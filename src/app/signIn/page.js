@@ -62,14 +62,19 @@ export default function SignInPage() {
   };
 
   const handleGitHubLogin = async () => {
+    const redirectBase =
+      typeof window !== "undefined"
+        ? window.location.origin
+        : process.env.NEXT_PUBLIC_SITE_URL;
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/home`,
+        redirectTo: `${redirectBase}/home`,
       },
-    })
-    if (error) setError(error.message)
-  }
+    });
+    if (error) setError(error.message);
+  };
 
   return (
     <>

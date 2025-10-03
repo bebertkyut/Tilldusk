@@ -305,8 +305,17 @@ export default function Home() {
               key={post.id}
               className="bg-[var(--color-surface)] p-6 rounded-xl shadow hover:shadow-md transition"
             >
-              <h2 className="text-xl font-semibold mb-2">{post.title}</h2>
-              <p className="text-gray-700">{post.excerpt}</p>
+              <h2 
+                className="text-xl text-[var(--color-text)] font-semibold mb-2" 
+                style={{ fontFamily: "var(--font-title)" }}
+              >
+                {post.title}
+              </h2>
+              <p 
+                className="text-[var(--color-text)]"
+                style={{ fontFamily: "var(--font-sans)" }}
+              >
+                {post.excerpt}</p>
             </article>
           ))}
         </section>
