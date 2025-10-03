@@ -10,9 +10,11 @@ import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { GearIcon, BellIcon, ImgIcon, VideoIcon } from "@/components/ui/icons";
 import { getThemeKey } from "@/app/utils/theme";
+import { usePosts } from "@/hooks/usePosts";
 
 export default function Home() {
   const { profile } = useProfile();
+  const { posts, fetchPosts } = usePosts(profile?.id); 
   const [handleGearClick, spinMotion] = useGearSpinOnClick();
   const [handleBellShake, shakeMotion] = useBellShakeOnClick(); 
   const [showDropdown, setShowDropdown] = useState(false);
@@ -22,7 +24,7 @@ export default function Home() {
   const dropdownRef = useRef(null);
   const [season, setSeason] = useState(profile?.season);
   const [mode, setMode] = useState(profile?.mode);
-
+  
   useEffect(() => {
     if (profile) {
       setSeason(profile.season);
@@ -81,10 +83,10 @@ export default function Home() {
       }
     : { name: "", username: "", bio: "", avatar: null, banner: null, season: "", mode: "" };
 
-  const posts = [
-    { id: 1, title: "My First Blog", excerpt: "This is about my journey..." },
-    { id: 2, title: "Next.js Tips", excerpt: "Some tips I’ve learned..." },
-  ];
+  // const posts = [
+  //   { id: 1, title: "My First Blog", excerpt: "This is about my journey..." },
+  //   { id: 2, title: "Next.js Tips", excerpt: "Some tips I’ve learned..." },
+  // ];
   const notifications = ["New follower: John", "Your post got 5 likes"];
   const followers = [
     { id: 1, name: "John", avatar: "/john.png" },
@@ -300,27 +302,33 @@ export default function Home() {
               </span>
             </div>
           </div>
-          {posts.map((post) => (
-            <article
-              key={post.id}
-              className="bg-[var(--color-surface)] p-6 rounded-xl shadow hover:shadow-md transition"
+        {posts.map((post) => (
+          <article
+            key={post.id}
+            className="bg-[var(--color-surface)] p-6 rounded-xl shadow hover:shadow-md transition"
+          >
+            <h2
+              className="text-xl text-[var(--color-text)] font-semibold mb-2"
+              style={{ fontFamily: "var(--font-title)" }}
             >
-              <h2 
-                className="text-xl text-[var(--color-text)] font-semibold mb-2" 
-                style={{ fontFamily: "var(--font-title)" }}
-              >
-                {post.title}
-              </h2>
-              <p 
-                className="text-[var(--color-text)]"
-                style={{ fontFamily: "var(--font-sans)" }}
-              >
-                {post.excerpt}</p>
-            </article>
-          ))}
+              {post.title}
+            </h2>
+            <p
+              className="text-[var(--color-text)]"
+              style={{ fontFamily: "var(--font-sans)" }}
+            >
+              {post.content}
+            </p>
+          </article>
+        ))}
         </section>
-        <CreateBlogModal isOpen={showCreateBlogModal} onClose={() => setShowCreateBlogModal(false)} />
-
+        <CreateBlogModal
+          isOpen={showCreateBlogModal}
+          onClose={() => {
+            setShowCreateBlogModal(false);
+            fetchPosts();
+          }}
+       />
         {/* Right Sidebar (Notifications + Suggestions) */}
         <aside className="md:col-span-1 space-y-6">
           <div className="bg-[var(--color-surface)] p-4 rounded-xl shadow">
