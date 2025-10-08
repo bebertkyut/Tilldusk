@@ -11,9 +11,26 @@ export function usePosts(userId) {
     }
     const { data, error } = await supabase
       .from("posts")
-      .select("id, title, content, user_id")
+      .select(`
+        id,
+        title,
+        content,
+        created_at,
+        user_id,
+        users (
+          username,
+          avatar_url
+        )
+      `)
       .eq("user_id", userId);
-    setPosts(data || []);
+
+    // Map user info to post.author for your Post component
+    const postsWithAuthor = (data || []).map(post => ({
+      ...post,
+      author: post.users || {}
+    }));
+
+    setPosts(postsWithAuthor);
   }, [userId]);
 
   useEffect(() => {

@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import Post from "@/components/Post";
 import SettingsModal from "@/components/settingsModal";
 import CreateBlogModal from "@/components/createBlogModal";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -303,32 +304,16 @@ export default function Home() {
             </div>
           </div>
         {posts.map((post) => (
-          <article
-            key={post.id}
-            className="bg-[var(--color-surface)] p-6 rounded-xl shadow hover:shadow-md transition"
-          >
-            <h2
-              className="text-xl text-[var(--color-text)] font-semibold mb-2"
-              style={{ fontFamily: "var(--font-title)" }}
-            >
-              {post.title}
-            </h2>
-            <p
-              className="text-[var(--color-text)]"
-              style={{ fontFamily: "var(--font-sans)" }}
-            >
-              {post.content}
-            </p>
-          </article>
-        ))}
-        </section>
-        <CreateBlogModal
-          isOpen={showCreateBlogModal}
-          onClose={() => {
-            setShowCreateBlogModal(false);
-            fetchPosts();
-          }}
-       />
+              <Post key={post.id} post={post} />
+            ))}
+          </section>
+          <CreateBlogModal
+            isOpen={showCreateBlogModal}
+            onClose={() => {
+              setShowCreateBlogModal(false);
+              fetchPosts();
+            }}
+          />
         {/* Right Sidebar (Notifications + Suggestions) */}
         <aside className="md:col-span-1 space-y-6">
           <div className="bg-[var(--color-surface)] p-4 rounded-xl shadow">
