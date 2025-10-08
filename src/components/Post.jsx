@@ -48,18 +48,6 @@ export default function Post({ post, full = false }) {
       <p className="text-[var(--color-text)] leading-relaxed whitespace-pre-line">
         {full ? post.content : post.content.slice(0, 180) + (post.content.length > 180 ? "..." : "")}
       </p>
-
-      {/* Optional Read More button */}
-      {!full && (
-        <div className="mt-3">
-          <Link
-            href={`/posts/${post.id}`}
-            className="text-sm font-medium text-[var(--color-primary)] hover:underline"
-          >
-            Read more →
-          </Link>
-        </div>
-      )}
     </article>
   );
 }
