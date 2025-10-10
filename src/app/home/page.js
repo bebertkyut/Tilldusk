@@ -84,10 +84,6 @@ export default function Home() {
       }
     : { name: "", username: "", bio: "", avatar: null, banner: null, season: "", mode: "" };
 
-  // const posts = [
-  //   { id: 1, title: "My First Blog", excerpt: "This is about my journey..." },
-  //   { id: 2, title: "Next.js Tips", excerpt: "Some tips I’ve learned..." },
-  // ];
   const notifications = ["New follower: John", "Your post got 5 likes"];
   const followers = [
     { id: 1, name: "John", avatar: "/john.png" },
