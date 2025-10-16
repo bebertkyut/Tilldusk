@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { HeartIcon, HeartFilledIcon, MessageIcon } from "@/components/ui/icons";
 
 export default function Post({ post, full = false }) {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -14,6 +15,7 @@ export default function Post({ post, full = false }) {
 
   const handleMessage = () => {
     // TODO: Later — open chat with post.author.id
+    alert("Message icon is clicked!");
   };
 
   return (
@@ -63,23 +65,24 @@ export default function Post({ post, full = false }) {
           : post.content.slice(0, 180) + (post.content.length > 180 ? "..." : "")}
       </p>
 
-      {/* --- ACTION BUTTONS --- */}
-      <div className="flex gap-4 mt-3">
+      <div className="flex flex-row gap-4 mt-3">
         <button
           onClick={handleFavorite}
-          className={`px-3 py-1 rounded-lg text-sm font-medium transition ${
-            isFavorite
-              ? "bg-red-500 text-white"
-              : "bg-gray-200 hover:bg-gray-300 text-gray-700"
-          }`}
+          className="flex-1 flex items-center justify-center text-xl gap-2"
+          style={{ 
+            fontFamily: "var(--font-garamond)",
+            color: isFavorite ? "var(--color-accent)" : "var(--color-text)"
+          }}
         >
-          {isFavorite ? "Favorited" : "Favorite"}
+          Favorite
         </button>
 
         <button
           onClick={handleMessage}
-          className="px-3 py-1 rounded-lg text-sm font-medium bg-blue-500 text-white hover:bg-blue-600 transition"
+          className="flex-1 flex items-center justify-center text-xl gap-2"
+          style={{ fontFamily: "var(--font-garamond)" }}
         >
+          <MessageIcon width={20} height={20} />
           Message
         </button>
       </div>

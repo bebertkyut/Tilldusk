@@ -90,3 +90,63 @@ export function VideoIcon({ as: Component = "svg", ...props }) {
     </Component>
   );
 }
+
+export function HeartIcon({ as: Component = "svg", ...props }) {
+  return (
+    //Majestic Icons
+    <Component
+      xmlns="http://www.w3.org/2000/svg"
+      width={props.width || 24}
+      height={props.height || 24}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M17 4c-3.2 0-5 2.667-5 4c0-1.333-1.8-4-5-4S3 6.667 3 8c0 7 9 12 9 12s9-5 9-12c0-1.333-.8-4-4-4"/>
+    </Component>
+  );
+}
+
+export function HeartFilledIcon({ as: Component = "svg", ...props }) {
+  return (
+    //Majestic Icons
+    <Component
+      xmlns="http://www.w3.org/2000/svg"
+      width={props.width || 24}
+      height={props.height || 24}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M17 4c-3.2 0-5 2.667-5 4c0-1.333-1.8-4-5-4S3 6.667 3 8c0 7 9 12 9 12s9-5 9-12c0-1.333-.8-4-4-4"/>
+    </Component>
+  );
+}
+
+export function MessageIcon({ as: Component = "svg", ...props }) {
+  return (
+    //Majestic Icons
+    <Component
+      xmlns="http://www.w3.org/2000/svg"
+      width={props.width || 24}
+      height={props.height || 24}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M19 4H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h3.188c1 0 1.812.811 1.812 1.812c0 .808.976 1.212 1.547.641l1.867-1.867A2 2 0 0 1 14.828 18H19a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2"/>
+    </Component>
+  );
+}
