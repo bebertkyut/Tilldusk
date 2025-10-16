@@ -178,62 +178,64 @@ export default function Home() {
       <main className="grid grid-cols-1 md:grid-cols-4 gap-6 p-6 bg-[var(--color-background)] min-h-screen pt-20">
         {/* Left Sidebar (Profile + Followers) */}
         <aside className="md:col-span-1 space-y-6">
-          <div className="bg-[var(--color-surface)] rounded-xl shadow min-h-80 relative overflow-hidden flex flex-col justify-start">
-            {user.banner && (
-              <Image
-                src={user.banner}
-                alt="Profile banner"
-                width={400}
-                height={120}
-                className="absolute top-0 left-0 w-full h-[7.5rem] object-cover"
-                priority
-              />
-            )}
-            <div
-              className="p-4 flex flex-row items-center justify-start gap-4 relative z-10"
-              style={{ marginTop: '6rem' }}
-            >
-              <div className="flex flex-col items-center">
-                {user.avatar && (
-                  <Image
-                    src={user.avatar}
-                    alt={user.name}
-                    width={80}
-                    height={80}
-                    className="w-20 h-20 rounded-full border-4 border-[var(--color-surface)] -mt-5"
-                  />
-                )}
-              </div>
-              <div>
-                <h2 className="text-left text-lg font-bold">{user.name}</h2>
-                <p className="text-left text-xs line-clamp-2 mt-0">{user.username}</p>
-              </div>
-            </div>
-            <div className="flex flex-col px-4">
-              <span
-                style={{ fontFamily: "var(--font-garamond)" }}
-                className="italic font-bold text-lg ml-4"
+          <Link href={profile?.id ? `/profile/${profile.id}` : "#"} className="block">
+            <div className="bg-[var(--color-surface)] rounded-xl shadow min-h-80 relative overflow-hidden flex flex-col justify-start cursor-pointer hover:shadow-lg transition">
+              {user.banner && (
+                <Image
+                  src={user.banner}
+                  alt="Profile banner"
+                  width={400}
+                  height={120}
+                  className="absolute top-0 left-0 w-full h-[7.5rem] object-cover"
+                  priority
+                />
+              )}
+              <div
+                className="p-4 flex flex-row items-center justify-start gap-4 relative z-10"
+                style={{ marginTop: '6rem' }}
               >
-                and I Quote
-              </span>
-              <span
-                style={{ fontFamily: "var(--font-garamond)" }}
-                className="text-md mt-1 text-center"
-              >
-                “{user.bio || ""}”
-              </span>
-            </div>
-            <div className="mt-5">
-              <div className="flex gap-4 mt-1 justify-center mb-4">
-                <span className="text-xs font-semibold">
-                  {10} Following
+                <div className="flex flex-col items-center">
+                  {user.avatar && (
+                    <Image
+                      src={user.avatar}
+                      alt={user.name}
+                      width={80}
+                      height={80}
+                      className="w-20 h-20 rounded-full border-4 border-[var(--color-surface)] -mt-5"
+                    />
+                  )}
+                </div>
+                <div>
+                  <h2 className="text-left text-lg font-bold">{user.name}</h2>
+                  <p className="text-left text-xs line-clamp-2 mt-0">{user.username}</p>
+                </div>
+              </div>
+              <div className="flex flex-col px-4">
+                <span
+                  style={{ fontFamily: "var(--font-garamond)" }}
+                  className="italic font-bold text-lg ml-4"
+                >
+                  and I Quote
                 </span>
-                <span className="text-xs font-semibold">
-                  {10} Followers
+                <span
+                  style={{ fontFamily: "var(--font-garamond)" }}
+                  className="text-md mt-1 text-center"
+                >
+                  “{user.bio || ""}”
                 </span>
               </div>
+              <div className="mt-5">
+                <div className="flex gap-4 mt-1 justify-center mb-4">
+                  <span className="text-xs font-semibold">
+                    {10} Following
+                  </span>
+                  <span className="text-xs font-semibold">
+                    {10} Followers
+                  </span>
+                </div>
+              </div>
             </div>
-          </div>
+          </Link>
           <div className="bg-[var(--color-surface)] p-4 rounded-xl shadow">
             <h3 className="font-semibold mb-2">Followers</h3>
             <div className="flex flex-wrap gap-2">

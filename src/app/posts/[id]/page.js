@@ -11,7 +11,6 @@ import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { GearIcon, BellIcon } from "@/components/ui/icons";
 
-
 export default function PostPage() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
@@ -29,6 +28,7 @@ export default function PostPage() {
     handleSettingsClick(e);
     setShowDropdown((prev) => !prev);
   };
+
   useEffect(() => {
     if (!id) return;
 
@@ -146,8 +146,8 @@ export default function PostPage() {
           <SettingsModal isOpen={showSettingsModal} onClose={() => setShowSettingsModal(false)} />
         </div>
       </nav>
-
-
+      
+      {/* Main Post Content */}
       <div 
         className="max-w-3xl mx-auto p-6 space-y-6 mt-20 bg-[var(--color-surface)] rounded-xl shadow"
         style={{fontFamily: "var(--font-sans)"}}

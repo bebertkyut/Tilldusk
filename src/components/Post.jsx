@@ -4,8 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Post({ post, full = false }) {
-  // post = { id, title, content, created_at, author: { username, avatar_url } }
-
+  
   return (
     <article
       className="bg-[var(--color-surface)] p-6 rounded-xl shadow hover:shadow-md transition"
