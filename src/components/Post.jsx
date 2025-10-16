@@ -74,6 +74,7 @@ export default function Post({ post, full = false }) {
             color: isFavorite ? "var(--color-accent)" : "var(--color-text)"
           }}
         >
+          {isFavorite ? <HeartFilledIcon width={20} height={20} /> : <HeartIcon width={20} height={20} />}
           Favorite
         </button>
 
