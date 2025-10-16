@@ -1,20 +1,19 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import Post from "@/components/Post";
 import SettingsModal from "@/components/settingsModal";
 import { useParams } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { useProfile } from "@/hooks/useProfile";
 import { useGearSpinOnClick, useBellShakeOnClick } from "@/hooks/useAnimations";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { GearIcon, BellIcon } from "@/components/ui/icons";
+import { usePosts } from "@/hooks/usePosts";
 
 export default function PostPage() {
   const { id } = useParams();
-  const [post, setPost] = useState(null);
-  const [loading, setLoading] = useState(true);
   const { profile } = useProfile();
   const [handleSettingsClick, spinMotion] = useGearSpinOnClick();
   const [handleBellShake, shakeMotion] = useBellShakeOnClick(); 
@@ -23,43 +22,16 @@ export default function PostPage() {
   const buttonRef = useRef(null);
   const dropdownRef = useRef(null);
   const openSettingsModal = () => setShowSettingsModal(true);
+  const userId = profile?.id;
+  const { posts } = usePosts(userId);
+  const post = posts.find((p) => String(p.id) === String(id));
+  const loading = !posts.length && !!userId;
+ 
 
   const handleSettingsButtonClick = (e) => {
     handleSettingsClick(e);
     setShowDropdown((prev) => !prev);
   };
-
-  useEffect(() => {
-    if (!id) return;
-
-    const fetchPost = async () => {
-      const { data, error } = await supabase
-        .from("posts")
-        .select(`
-          id,
-          title,
-          content,
-          created_at,
-          users(
-            username,
-            display_name,
-            avatar_url
-          )
-        `)
-        .eq("id", id)
-        .single();
-
-      if (error) {
-        console.error(error);
-      } else {
-        setPost(data);
-      }
-
-      setLoading(false);
-    };
-
-    fetchPost();
-  }, [id]);
 
   if (loading) return <p className="text-center mt-8">Loading...</p>;
   if (!post) return <p className="text-center mt-8">Post not found.</p>;
@@ -148,41 +120,8 @@ export default function PostPage() {
       </nav>
       
       {/* Main Post Content */}
-      <div 
-        className="max-w-3xl mx-auto p-6 space-y-6 mt-20 bg-[var(--color-surface)] rounded-xl shadow"
-        style={{fontFamily: "var(--font-sans)"}}
-      >      
-        {/* Post Header */}
-        <div className="flex items-center gap-3 mb-6">
-          <div className="relative w-10 h-10">
-            <Image
-              src={post.users?.avatar_url || "/default-avatar.png"}
-              alt={post.users?.display_name || "User"}
-              fill
-              className="rounded-full object-cover"
-              sizes="40px"
-            />
-          </div>
-          <div>
-            <h2 className="font-semibold text-lg">
-              {post.users?.display_name || post.users?.username}
-            </h2>
-            <p className="text-sm">
-              {new Date(post.created_at).toLocaleDateString()}
-            </p>
-          </div>
-        </div>
-
-        {/* Post Content */}
-        <h1 
-          className="text-2xl font-bold mb-4"
-          style={{ fontFamily: "var(--font-title)" }}
-        >
-          {post.title}
-        </h1>
-        <p className="leading-relaxed whitespace-pre-line">
-          {post.content}
-        </p>
+      <div className="max-w-3xl mx-auto p-6 space-y-6 mt-20">      
+        <Post post={post} full={true}/>
       </div>
     </ThemeProvider>
   );

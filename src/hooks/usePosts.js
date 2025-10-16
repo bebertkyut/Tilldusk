@@ -18,6 +18,7 @@ export function usePosts(userId) {
         created_at,
         user_id,
         users (
+          display_name,
           username,
           avatar_url
         )
