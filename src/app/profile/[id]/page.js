@@ -27,7 +27,9 @@ export default function ProfilePage() {
   const openSettingsModal = () => setShowSettingsModal(true);
   const [activeTab, setActiveTab] = useState("stories");
   const [currentUser, setCurrentUser] = useState(null);
- const { favorites, toggleFavorite } = useFavorites(currentUser?.id);
+  const { favorites, toggleFavorite } = useFavorites(currentUser?.id);
+  const [favoritePosts, setFavoritePosts] = useState([]);
+  const [favoritesLoading, setFavoritesLoading] = useState(false);
 
   const handleSettingsButtonClick = (e) => {
     handleSettingsClick(e);
@@ -56,6 +58,32 @@ export default function ProfilePage() {
     };
     fetchProfile();
   }, [id]);
+
+  useEffect(() => {
+    if (activeTab !== "favorites") return;
+    if (!currentUser) return;
+
+    if (!favorites || favorites.length === 0) {
+      setFavoritePosts([]);
+      return;
+    }
+
+    let cancelled = false;
+    setFavoritesLoading(true);
+    (async () => {
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .in("id", favorites);
+
+      if (!cancelled) {
+        setFavoritePosts(data || []);
+        setFavoritesLoading(false);
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, [activeTab, favorites, currentUser]);
 
   if (loading) return <div>Loading...</div>;
   if (!profile) return <div>User not found.</div>;
@@ -228,24 +256,46 @@ export default function ProfilePage() {
           }}
         ></span>
       </div>
-      {/* Display all posts */}
-      {activeTab === "stories" && (
-        <div className="mt-8 space-y-6">
-          {posts.length === 0 ? (
-            <div className="text-center text-gray-400">No posts yet.</div>
-          ) : (
-            posts.map((post) => (
-              <Post
-                key={post.id}
-                post={post}
-                isFavorited={favorites.includes(post.id)}
-                onToggleFavorite={() => toggleFavorite(post.id)}
-              />
-            ))
-          )}
-        </div>
-      )}
-    </div>
+      {/* Stories */}
+        {activeTab === "stories" && (
+          <div className="mt-8 space-y-6">
+            {posts.length === 0 ? (
+              <div className="text-center text-gray-400">No posts yet.</div>
+            ) : (
+              posts.map((post) => (
+                <Post
+                  key={post.id}
+                  post={post}
+                  isFavorited={favorites.includes(post.id)}
+                  onToggleFavorite={() => toggleFavorite(post.id)}
+                />
+              ))
+            )}
+          </div>
+        )}
+
+        {/* Favorites */}
+        {activeTab === "favorites" && (
+          <div className="mt-8 space-y-6">
+            {!currentUser ? (
+              <div className="text-center text-gray-400">Sign in to view favorites.</div>
+            ) : favoritesLoading ? (
+              <div className="text-center text-gray-400">Loading favorites...</div>
+            ) : favoritePosts.length === 0 ? (
+              <div className="text-center text-gray-400">No favorites yet.</div>
+            ) : (
+              favoritePosts.map((post) => (
+                <Post
+                  key={post.id}
+                  post={post}
+                  isFavorited={true}
+                  onToggleFavorite={() => toggleFavorite(post.id)}
+                />
+              ))
+            )}
+          </div>
+        )}
+      </div>
 
     </ThemeProvider>
   );
