@@ -1,16 +1,41 @@
 "use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import { useState, useEffect } from "react";
 import { HeartIcon, HeartFilledIcon, MessageIcon } from "@/components/ui/icons";
 
-export default function Post({ post, full = false }) {
-  const [isFavorite, setIsFavorite] = useState(false);
+export default function Post({ post, full = false, isFavorited = false, onToggleFavorite }) {
+  const [isFavorite, setIsFavorite] = useState(isFavorited);
+
+  // keep local state in sync with parent once favorites load
+  useEffect(() => {
+    setIsFavorite(isFavorited);
+  }, [isFavorited]);
 
   const handleFavorite = async () => {
-    setIsFavorite(!isFavorite);
-    // TODO: Add logic to save/remove favorite in Supabase
+    const prev = isFavorite;
+    setIsFavorite(!prev); // optimistic
+    try {
+      if (typeof onToggleFavorite === "function") {
+        await onToggleFavorite(post.id);
+        return;
+      }
+      const user = (await supabase.auth.getUser()).data.user;
+      if (!user) {
+        alert("You must be logged in to favorite a post.");
+        setIsFavorite(prev);
+        return;
+      }
+      if (!prev) {
+        await supabase.from("favorites").insert([{ user_id: user.id, post_id: post.id }]);
+      } else {
+        await supabase.from("favorites").delete().eq("user_id", user.id).eq("post_id", post.id);
+      }
+    } catch (e) {
+      setIsFavorite(prev);
+      console.error(e);
+    }
   };
 
   const handleMessage = () => {

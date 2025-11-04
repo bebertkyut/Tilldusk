@@ -12,10 +12,12 @@ import { motion } from "framer-motion";
 import { GearIcon, BellIcon, ImgIcon, VideoIcon } from "@/components/ui/icons";
 import { getThemeKey } from "@/app/utils/theme";
 import { usePosts } from "@/hooks/usePosts";
+import { useFavorites } from "@/hooks/useFavorites";
 
 export default function Home() {
   const { profile } = useProfile();
-  const { posts, fetchPosts } = usePosts(profile?.id); 
+  const { posts, fetchPosts } = usePosts(profile?.id);
+  const { favorites, toggleFavorite } = useFavorites(profile?.id);
   const [handleGearClick, spinMotion] = useGearSpinOnClick();
   const [handleBellShake, shakeMotion] = useBellShakeOnClick(); 
   const [showDropdown, setShowDropdown] = useState(false);
@@ -302,7 +304,12 @@ export default function Home() {
             </div>
           </div>
         {posts.map((post) => (
-              <Post key={post.id} post={post} />
+              <Post
+                key={post.id}
+                post={post}
+                isFavorited={favorites.includes(post.id)}
+                onToggleFavorite={() => toggleFavorite(post.id)}
+              />
             ))}
           </section>
           <CreateBlogModal

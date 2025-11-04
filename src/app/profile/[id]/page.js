@@ -6,11 +6,12 @@ import Post from "@/components/Post";
 import { useParams } from "next/navigation";
 import { usePosts } from "@/hooks/usePosts";
 import { useEffect, useState, useRef } from "react";
-import { supabase } from "@/lib/supabaseClient";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { useGearSpinOnClick, useBellShakeOnClick } from "@/hooks/useAnimations";
 import { motion } from "framer-motion";
 import { GearIcon, BellIcon } from "@/components/ui/icons";
+import { supabase } from "@/lib/supabaseClient";
+import { useFavorites } from "@/hooks/useFavorites";
 
 export default function ProfilePage() {
   const { id } = useParams();
@@ -25,12 +26,22 @@ export default function ProfilePage() {
   const dropdownRef = useRef(null);
   const openSettingsModal = () => setShowSettingsModal(true);
   const [activeTab, setActiveTab] = useState("stories");
-  
+  const [currentUser, setCurrentUser] = useState(null);
+ const { favorites, toggleFavorite } = useFavorites(currentUser?.id);
 
   const handleSettingsButtonClick = (e) => {
     handleSettingsClick(e);
     setShowDropdown((prev) => !prev);
   };
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const { data } = await supabase.auth.getUser();
+      if (mounted) setCurrentUser(data?.user ?? null);
+    })();
+    return () => { mounted = false; };
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -177,7 +188,7 @@ export default function ProfilePage() {
           “{profile.bio}”
         </span>
       </div>
-      <div className="flex gap-8 mt-8 mb-16 ml-4">
+      <div className="flex gap-8 mt-8 mb-8 ml-4">
         <span className="text-md font-semibold">
           {10} Following
         </span>
@@ -185,7 +196,7 @@ export default function ProfilePage() {
           {10} Followers
         </span>
       </div>
-      <div className="flex justify-between items-end w-full gap-0 mt-8 relative">
+      <div className="sticky top-0 z-50 bg-[var(--color-surface)] pt-4 flex justify-between items-end w-full gap-0 mt-8 relative">
         {["stories", "favorites", "fan-favorite"].map((tab, idx) => (
           <button
             key={tab}
@@ -224,7 +235,12 @@ export default function ProfilePage() {
             <div className="text-center text-gray-400">No posts yet.</div>
           ) : (
             posts.map((post) => (
-              <Post key={post.id} post={post} />
+              <Post
+                key={post.id}
+                post={post}
+                isFavorited={favorites.includes(post.id)}
+                onToggleFavorite={() => toggleFavorite(post.id)}
+              />
             ))
           )}
         </div>
