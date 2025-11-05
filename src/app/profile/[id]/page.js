@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import SettingsModal from "@/components/settingsModal";
+import EditProfileModal from "@/components/EditProfileModal";
 import Post from "@/components/Post";
 import { useParams } from "next/navigation";
 import { usePosts } from "@/hooks/usePosts";
@@ -9,7 +10,7 @@ import { useEffect, useState, useRef } from "react";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { useGearSpinOnClick, useBellShakeOnClick } from "@/hooks/useAnimations";
 import { motion } from "framer-motion";
-import { GearIcon, BellIcon } from "@/components/ui/icons";
+import { GearIcon, BellIcon, PencilIcon } from "@/components/ui/icons";
 import { supabase } from "@/lib/supabaseClient";
 import { useFavorites } from "@/hooks/useFavorites";
 
@@ -22,6 +23,7 @@ export default function ProfilePage() {
   const [handleBellShake, shakeMotion] = useBellShakeOnClick();
   const [showDropdown, setShowDropdown] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const buttonRef = useRef(null);
   const dropdownRef = useRef(null);
   const openSettingsModal = () => setShowSettingsModal(true);
@@ -168,6 +170,7 @@ export default function ProfilePage() {
             )}
           </button>
           <SettingsModal isOpen={showSettingsModal} onClose={() => setShowSettingsModal(false)} />
+            <EditProfileModal isOpen={showEditModal} onClose={() => setShowEditModal(false)} profile={profile} onUpdated={setProfile} />
         </div>
     </nav>
     {/* Profile Content */}
@@ -195,11 +198,29 @@ export default function ProfilePage() {
               className="rounded-full object-cover border-4 border-[var(--color-surface)] shadow-lg"
             />
             {/* Name and Username */}
-            <div className="flex flex-col justify-end ml-4 mb-4">
-              <h1 className="text-xl font-bold">{profile.display_name}</h1>
-              <p className="text-color-[var(--color-text)] text-lg">@{profile.username}</p>
+            <div className="flex items-start ml-4 mb-3 gap-2">
+              <div className="flex flex-col">
+                <h1 className="text-xl font-bold">{profile.display_name}</h1>
+                <p className="text-color-[var(--color-text)] text-lg">@{profile.username}</p>
+              </div>
             </div>
           </div>
+
+          {/* Edit pencil pinned to right edge */}
+          {currentUser?.id === profile.id && (
+            <button
+              type="button"
+              aria-label="Edit name"
+              className="absolute right-8 -bottom-9 z-10 p-1 rounded-full transition hover:bg-[var(--color-primary)/10]"
+              onClick={() => setShowEditModal(true)}
+            >
+              <PencilIcon
+                width={20}
+                height={20}
+                className="text-[var(--color-text)] hover:text-[var(--color-primary)]"
+              />
+            </button>
+          )}
         </div>
       )}
       <div className="flex flex-col mt-20">
