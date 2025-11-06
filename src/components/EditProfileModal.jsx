@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Modal from "@/components/modal";
-import { supabase } from "@/lib/supabaseClient";
+import { useProfile } from "@/hooks/useProfile";
 
 export default function EditProfileModal({ isOpen, onClose, profile, onUpdated }) {
   const [displayName, setDisplayName] = useState("");
@@ -11,28 +11,25 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdated }
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const avatarInputRef = useRef(null);
-
-  // New: image state
   const [avatarFile, setAvatarFile] = useState(null);
   const [bannerFile, setBannerFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState("");
   const [bannerPreview, setBannerPreview] = useState("");
+ const { updateProfile, uploadToBucket } = useProfile();
 
-  
   useEffect(() => {
     if (!isOpen || !profile) return;
     setDisplayName(profile.display_name || "");
     setUsername(profile.username || "");
     setBio((profile.bio || "").slice(0, 200));
     setError("");
-    // Reset image selections and previews
+
     setAvatarFile(null);
     setBannerFile(null);
     setAvatarPreview(profile.avatar_url || "");
     setBannerPreview(profile.banner || "");
   }, [isOpen, profile]);
 
-  // New: file change handlers
   const onAvatarChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -47,19 +44,6 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdated }
     setBannerPreview(URL.createObjectURL(file));
   };
 
-  // Helper to upload to Supabase Storage
-  const uploadImage = async (bucket, file, userId) => {
-    const ext = file.name.split(".").pop();
-    const path = `${userId}/${bucket}-${Date.now()}.${ext || "jpg"}`;
-    const { error: uploadError } = await supabase.storage.from(bucket).upload(path, file, {
-      upsert: true,
-      contentType: file.type,
-    });
-    if (uploadError) throw uploadError;
-    const { data: pub } = supabase.storage.from(bucket).getPublicUrl(path);
-    return pub?.publicUrl;
-  };
-
   const handleSave = async () => {
     if (!profile?.id) return;
     setSaving(true);
@@ -69,27 +53,28 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdated }
       let avatar_url = profile.avatar_url || "";
       let banner = profile.banner || "";
 
-      // Upload selected images if any
+      // Use hook uploader against bucket "profile" and folders "avatars"/"banners"
       if (avatarFile) {
-        avatar_url = await uploadImage("avatars", avatarFile, profile.id);
+        const { url, error } = await uploadToBucket("profile", "avatars", avatarFile, profile.id);
+        if (error) throw error;
+        if (url) avatar_url = url;
       }
       if (bannerFile) {
-        banner = await uploadImage("banners", bannerFile, profile.id);
+        const { url, error } = await uploadToBucket("profile", "banners", bannerFile, profile.id);
+        if (error) throw error;
+        if (url) banner = url;
       }
 
-      const { data, error } = await supabase
-        .from("users")
-        .update({
+      const { data, error } = await updateProfile(
+        {
           display_name: displayName.trim(),
           username: username.trim(),
           bio,
           avatar_url,
           banner,
-        })
-        .eq("id", profile.id)
-        .select("id, display_name, username, bio, avatar_url, banner, mode")
-        .single();
-
+        },
+        profile.id
+      );
       if (error) throw error;
 
       onUpdated?.(data);
