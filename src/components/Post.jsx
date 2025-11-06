@@ -1,29 +1,68 @@
 "use client";
-
 import Image from "next/image";
 import Link from "next/link";
+import { supabase } from "@/lib/supabaseClient";
+import { useState, useEffect } from "react";
+import { HeartIcon, HeartFilledIcon, MessageIcon } from "@/components/ui/icons";
 
-export default function Post({ post, full = false }) {
-  // post = { id, title, content, created_at, author: { username, avatar_url } }
+export default function Post({ post, full = false, isFavorited = false, onToggleFavorite }) {
+  const [isFavorite, setIsFavorite] = useState(isFavorited);
+
+  // keep local state in sync with parent once favorites load
+  useEffect(() => {
+    setIsFavorite(isFavorited);
+  }, [isFavorited]);
+
+  const handleFavorite = async () => {
+    const prev = isFavorite;
+    setIsFavorite(!prev); // optimistic
+    try {
+      if (typeof onToggleFavorite === "function") {
+        await onToggleFavorite(post.id);
+        return;
+      }
+      const user = (await supabase.auth.getUser()).data.user;
+      if (!user) {
+        alert("You must be logged in to favorite a post.");
+        setIsFavorite(prev);
+        return;
+      }
+      if (!prev) {
+        await supabase.from("favorites").insert([{ user_id: user.id, post_id: post.id }]);
+      } else {
+        await supabase.from("favorites").delete().eq("user_id", user.id).eq("post_id", post.id);
+      }
+    } catch (e) {
+      setIsFavorite(prev);
+      console.error(e);
+    }
+  };
+
+  const handleMessage = () => {
+    // TODO: Later — open chat with post.author.id
+    alert("Message icon is clicked!");
+  };
 
   return (
     <article
       className="bg-[var(--color-surface)] p-6 rounded-xl shadow hover:shadow-md transition"
       style={{ fontFamily: "var(--font-sans)" }}
     >
-      {/* Header (User Info + Date) */}
+      {/* Header */}
       <div className="flex items-center gap-3 mb-3">
         {post.author?.avatar_url && (
           <Image
             src={post.author.avatar_url}
-            alt={post.author.username}
+            alt={post.author?.display_name || "User avatar"}
             width={40}
             height={40}
             className="rounded-full"
           />
         )}
         <div className="flex flex-col">
-          <span className="font-semibold">{post.author?.username || "Unknown"}</span>
+          <span className="font-semibold">
+            {post.author?.display_name || ""}
+          </span>
           <span className="text-xs text-gray-500">
             {new Date(post.created_at).toLocaleDateString()}
           </span>
@@ -45,9 +84,34 @@ export default function Post({ post, full = false }) {
       </h2>
 
       {/* Content */}
-      <p className="text-[var(--color-text)] leading-relaxed whitespace-pre-line">
-        {full ? post.content : post.content.slice(0, 180) + (post.content.length > 180 ? "..." : "")}
+      <p className="text-[var(--color-text)] leading-relaxed whitespace-pre-line mb-4">
+        {full
+          ? post.content
+          : post.content.slice(0, 180) + (post.content.length > 180 ? "..." : "")}
       </p>
+
+      <div className="flex flex-row gap-4 mt-3">
+        <button
+          onClick={handleFavorite}
+          className="flex-1 flex items-center justify-center text-xl gap-2"
+          style={{ 
+            fontFamily: "var(--font-garamond)",
+            color: isFavorite ? "var(--color-accent)" : "var(--color-text)"
+          }}
+        >
+          {isFavorite ? <HeartFilledIcon width={20} height={20} /> : <HeartIcon width={20} height={20} />}
+          Favorite
+        </button>
+
+        <button
+          onClick={handleMessage}
+          className="flex-1 flex items-center justify-center text-xl gap-2"
+          style={{ fontFamily: "var(--font-garamond)" }}
+        >
+          <MessageIcon width={20} height={20} />
+          Message
+        </button>
+      </div>
     </article>
   );
 }

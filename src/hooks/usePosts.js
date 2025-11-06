@@ -17,7 +17,8 @@ export function usePosts(userId) {
         content,
         created_at,
         user_id,
-        users (
+        author:users (
+          display_name,
           username,
           avatar_url
         )

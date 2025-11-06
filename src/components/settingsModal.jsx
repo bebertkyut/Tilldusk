@@ -66,7 +66,7 @@ export default function SettingsModal({ isOpen, onClose }) {
             >
               Aesthetic
             </button>
-            <button
+            {/* <button
               onClick={() => setActiveTab("security")}
               className={`text-left px-2 py-1 rounded-md transition ${
                 activeTab === "security"
@@ -75,7 +75,7 @@ export default function SettingsModal({ isOpen, onClose }) {
               }`}
             >
               Security
-            </button>
+            </button> */}
           </nav>
 
           {/* Content */}
@@ -128,7 +128,7 @@ export default function SettingsModal({ isOpen, onClose }) {
               </>
             )}
 
-            {activeTab === "security" && (
+            {/* {activeTab === "security" && (
               <>
                 <div>
                   <label className="block text-sm font-medium mb-1">
@@ -149,7 +149,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                   </button>
                 </div>
               </>
-            )}
+            )} */}
           </div>
         </div>
       </div>
