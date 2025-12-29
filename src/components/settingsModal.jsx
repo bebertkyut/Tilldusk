@@ -23,7 +23,8 @@ import {
 export default function SettingsModal({ isOpen, onClose }) {
   const [activeTab, setActiveTab] = useState("aesthetic");
   const { season, setSeason, mode, setMode } = useTheme();
-  const { settings, updateSettings } = useSettings();
+  const { settings, updateAesthetic, updateSecurity } = useSettings();
+  const [password, setPassword] = useState("");
 
   // Sync context state with database when modal opens
   useEffect(() => {
@@ -44,10 +45,19 @@ export default function SettingsModal({ isOpen, onClose }) {
     }
   }, [season, mode, isOpen]);
 
+  const saveAesthetic = async () => {
+    await updateAesthetic({ season, mode });
+  };
+
+  const saveSecurity = async () => {
+    // TODO: implement password change, 2FA, etc.
+    await updateSecurity({ password });
+  };
 
   const handleSave = async () => {
-    await updateSettings({ season, mode });
-  };
+  if (activeTab === "aesthetic") return saveAesthetic();
+  if (activeTab === "security") return saveSecurity();
+};
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -66,7 +76,7 @@ export default function SettingsModal({ isOpen, onClose }) {
             >
               Aesthetic
             </button>
-            {/* <button
+            <button
               onClick={() => setActiveTab("security")}
               className={`text-left px-2 py-1 rounded-md transition ${
                 activeTab === "security"
@@ -75,7 +85,7 @@ export default function SettingsModal({ isOpen, onClose }) {
               }`}
             >
               Security
-            </button> */}
+            </button>
           </nav>
 
           {/* Content */}
@@ -122,13 +132,13 @@ export default function SettingsModal({ isOpen, onClose }) {
                   className="px-8 py-1.5 mt-2 bg-[var(--color-primary)] text-[var(--color-white)] text-sm hover:bg-[var(--color-primary-hover)] rounded-md"
                   onClick={handleSave}
                 >
-                    
                   Save
                 </button>
               </>
             )}
 
-            {/* {activeTab === "security" && (
+            {/* // TODO: Re-enable security settings with proper functionality */}
+            {activeTab === "security" && (
               <>
                 <div>
                   <label className="block text-sm font-medium mb-1">
@@ -138,18 +148,27 @@ export default function SettingsModal({ isOpen, onClose }) {
                     type="password"
                     placeholder="New password"
                     className="w-[20vw] rounded-md border px-2 py-1"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-                <div>
+                {/* <div>
                   <label className="block text-sm font-medium mb-1">
                     Two-Factor Auth
                   </label>
                   <button className="rounded-md bg-[var(--color-primary)] text-[var(--color-white)] hover:bg-[var(--color-primary-hover)] px-3 py-1">
                     Enable
                   </button>
-                </div>
+                </div> */}
+                <button 
+                  className="px-8 py-1.5 mt-2 bg-[var(--color-primary)] text-[var(--color-white)] text-sm hover:bg-[var(--color-primary-hover)] rounded-md"
+                  onClick={handleSave}
+                >
+                    
+                  Save
+                </button>
               </>
-            )} */}
+            )}
           </div>
         </div>
       </div>

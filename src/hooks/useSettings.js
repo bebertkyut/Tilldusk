@@ -1,76 +1,64 @@
-// useSettings.js
 import { useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+import { supabase } from "@/lib/supabaseClient";
 
 export function useSettings() {
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Fetch settings on mount
   useEffect(() => {
-    async function fetchSettings() {
+    (async () => {
       setLoading(true);
+      setError(null);
       const {
         data: { user },
         error: userError,
       } = await supabase.auth.getUser();
 
       if (userError || !user) {
-        console.error("No logged in user:", userError);
+        setError(userError || new Error("No logged-in user"));
         setLoading(false);
         return;
       }
 
-      const { data, error } = await supabase
+      const { data, error: fetchError } = await supabase
         .from("users")
         .select("season, mode")
         .eq("id", user.id)
         .single();
 
-      if (error) {
-        console.error("Error fetching settings:", error);
-      } else {
-        setSettings(data);
-      }
+      if (fetchError) setError(fetchError);
+      else setSettings(data);
 
       setLoading(false);
-    }
-
-    fetchSettings();
+    })();
   }, []);
 
-  // Update settings
-  async function updateSettings(updates) {
+  async function updateAesthetic({ season, mode }) {
     const {
       data: { user },
       error: userError,
     } = await supabase.auth.getUser();
+    if (userError || !user) return { ok: false, data: null, error: userError || new Error("No logged-in user") };
 
-    if (userError || !user) {
-      console.error("No logged in user:", userError);
-      return null;
-    }
-
-    const { data, error } = await supabase
+    const { data, error: updateError } = await supabase
       .from("users")
-      .update(updates)
+      .update({ season, mode })
       .eq("id", user.id)
-      .select()
+      .select("season, mode")
       .single();
 
-    if (error) {
-      console.error("Error updating settings:", error);
-      return null;
-    }
-
-    // update local state so UI reacts immediately
+    if (updateError) return { ok: false, data: null, error: updateError };
     setSettings(data);
-    return data;
+    return { ok: true, data, error: null };
   }
 
-  return { settings, loading, updateSettings };
+  async function updateSecurity({ password }) {
+    if (!password) return { ok: false, data: null, error: new Error("Password is required") };
+    const { data, error } = await supabase.auth.updateUser({ password });
+    if (error) return { ok: false, data: null, error };
+    return { ok: true, data, error: null };
+  }
+
+  return { settings, loading, error, updateAesthetic, updateSecurity };
 }
